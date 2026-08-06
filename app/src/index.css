@@ -1,0 +1,353 @@
+/* ============================================================
+   CONTABINEX — Landing Page
+   Design tokens extraídos do Figma (frame 1920 x 5455)
+   ============================================================ */
+:root {
+  /* Cores */
+  --navy: #33376f;        /* Azul institucional principal */
+  --teal: #62abb2;        /* Verde-água / destaque */
+  --teal-light: #dce8ea;  /* Verde-água claro (cards / botões) */
+  --gray: #606062;        /* Texto secundário */
+  --bg-gray: #f4f4f4;     /* Faixas de fundo */
+  --white: #ffffff;
+
+  /* Dimensões do design original (Figma) */
+  --design-w: 1920;
+  --design-h: 5455;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  background: var(--white);
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--navy);
+}
+
+/* Wrapper responsivo: escala o "palco" de 1920px para a largura da janela.
+   A altura do wrapper é ajustada por JS (App.jsx) mantendo a proporção,
+   preservando exatamente o grid e o espaçamento do Figma. */
+.canvas {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.stage {
+  position: relative;
+  width: 1920px;
+  height: 5455px;
+  transform-origin: top left;
+  background: var(--white);
+}
+
+/* Elemento posicionado de forma absoluta (coordenadas idênticas ao Figma) */
+.abs {
+  position: absolute;
+}
+
+img {
+  display: block;
+  max-width: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+/* ---- Hover: boxes interativos ---- */
+.box-card,
+.box-plan,
+.box-pill {
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+
+.box-card:hover,
+.box-plan:hover,
+.box-pill:hover {
+  transform: translateY(-6px);
+  z-index: 2;
+}
+
+.box-card__surface {
+  position: absolute;
+  inset: 0;
+  background: var(--teal-light);
+  border-radius: 20px;
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.box-card:hover .box-card__surface {
+  background: #c8dde0;
+  box-shadow: 0 12px 32px rgba(51, 55, 111, 0.12);
+}
+
+.box-plan__body {
+  position: absolute;
+  inset: 0;
+  background: var(--white);
+  border: 3px solid var(--teal);
+  border-radius: 20px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.box-plan:hover .box-plan__body {
+  border-color: var(--navy);
+  box-shadow: 0 16px 40px rgba(51, 55, 111, 0.15);
+}
+
+.box-plan__header {
+  transition: background 0.25s ease;
+}
+
+.box-plan:hover .box-plan__header {
+  background: #454a8a;
+}
+
+.box-pill {
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.box-pill:hover {
+  background: var(--teal-light);
+  border-color: var(--navy);
+  box-shadow: 0 8px 24px rgba(98, 171, 178, 0.25);
+}
+
+.box-cta {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, filter 0.2s ease;
+  cursor: pointer;
+}
+
+.box-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(51, 55, 111, 0.18);
+}
+
+.box-cta--light:hover {
+  background: #c8dde0 !important;
+}
+
+.box-cta--navy:hover {
+  background: #454a8a !important;
+}
+
+.box-plan .box-cta:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.box-plan:hover .box-cta--navy {
+  background: #454a8a !important;
+}
+
+.box-cta--svg {
+  border-radius: 36.5px;
+  overflow: hidden;
+}
+
+.box-cta--svg:hover {
+  filter: none;
+}
+
+.box-cta--svg:hover img {
+  filter: brightness(0.95);
+}
+
+.box-btn {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.box-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(51, 55, 111, 0.15);
+}
+
+.box-btn--outline:hover {
+  background: var(--teal-light);
+}
+
+.box-btn--navy:hover {
+  background: #454a8a;
+}
+
+.header-nav a {
+  color: var(--gray);
+  font-weight: 600;
+  font-size: 24px;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.header-nav a:hover {
+  color: #62abb2;
+}
+
+.footer-nav a,
+.footer-link {
+  color: var(--white);
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.footer-nav a:hover,
+.footer-link:hover {
+  color: #62abb2;
+  transform: translateX(4px);
+}
+
+.footer-social {
+  transition: transform 0.2s ease;
+}
+
+.footer-social img {
+  transition: filter 0.2s ease;
+}
+
+.footer-social:hover {
+  transform: translateY(-3px) scale(1.08);
+}
+
+.footer-social:hover img {
+  filter: brightness(0) saturate(100%) invert(62%) sepia(18%) saturate(687%) hue-rotate(139deg) brightness(92%) contrast(89%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .box-card,
+  .box-plan,
+  .box-pill,
+  .box-cta,
+  .box-btn,
+  .box-card__surface,
+  .box-plan__body,
+  .box-plan__header,
+  .header-nav a {
+    transition: none;
+  }
+
+  .footer-nav a,
+  .footer-link,
+  .footer-social {
+    transition: none;
+  }
+
+  .footer-nav a:hover,
+  .footer-link:hover,
+  .footer-social:hover {
+    transform: none;
+  }
+
+  .box-card:hover,
+  .box-plan:hover,
+  .box-pill:hover,
+  .box-cta:hover,
+  .box-btn:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   Animação de entrada — primitiva única "blur-rise"
+   Cada elemento entra desfocado + transparente + ~20px abaixo
+   e resolve para nítido + opaco + posição final (foco de câmera).
+   Sem bounce, sem scale, sem slide lateral. Dispara em viewport,
+   uma vez só. Stagger via --d (transition-delay).
+   ============================================================ */
+:root {
+  --anim-blur: 10px;
+  --anim-rise: 20px;
+  --anim-slide: 120px;
+  --anim-dur: 480ms;
+  --anim-dur-slide: 920ms;
+  --anim-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal {
+  opacity: 0;
+  filter: blur(var(--anim-blur));
+  transform: translate3d(0, var(--anim-rise), 0);
+  transition:
+    opacity var(--anim-dur) var(--anim-ease),
+    filter var(--anim-dur) var(--anim-ease),
+    transform var(--anim-dur) var(--anim-ease);
+  transition-delay: var(--d, 0ms);
+  will-change: opacity, filter, transform;
+}
+
+.reveal.is-in {
+  opacity: 1;
+  filter: blur(0);
+  transform: translate3d(0, 0, 0);
+}
+
+/* Variante para elementos centralizados com translateX(-50%):
+   compõe a centralização com a subida da animação. */
+.reveal--cx {
+  transform: translateX(-50%) translate3d(0, var(--anim-rise), 0);
+}
+.reveal--cx.is-in {
+  transform: translateX(-50%) translate3d(0, 0, 0);
+}
+
+/* Entrada da direita para a esquerda */
+.reveal--from-right {
+  transform: translate3d(var(--anim-slide), 0, 0);
+}
+
+.reveal--from-right.is-in {
+  transform: translate3d(0, 0, 0);
+}
+
+/* Entrada da esquerda para a direita */
+.reveal--from-left {
+  transform: translate3d(calc(var(--anim-slide) * -1), 0, 0);
+}
+
+.reveal--from-left.is-in {
+  transform: translate3d(0, 0, 0);
+}
+
+/* Libera a GPU depois que a transição termina (seções pesadas) */
+.reveal.anim-done {
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.is-in {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    transition: none;
+  }
+  .reveal--cx,
+  .reveal--cx.is-in {
+    transform: translateX(-50%);
+  }
+
+  .reveal--from-right,
+  .reveal--from-right.is-in {
+    transform: none;
+  }
+
+  .reveal--from-left,
+  .reveal--from-left.is-in {
+    transform: none;
+  }
+}
