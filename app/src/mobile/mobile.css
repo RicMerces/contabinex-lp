@@ -359,6 +359,22 @@
 .m-section--gray {
   background: var(--bg-gray);
 }
+.m-section--expansao {
+  position: relative;
+  padding: 36px 0 12px;
+  background-color: var(--bg-gray);
+  background-image:
+    linear-gradient(180deg, rgba(244, 244, 244, 0.82) 0%, rgba(244, 244, 244, 0.94) 55%, var(--bg-gray) 100%),
+    var(--expansao-bg);
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+.m-section--expansao > * {
+  position: relative;
+  z-index: 1;
+}
 
 /* ============================================================
    CARROSSEL HORIZONTAL (listagens lateralizadas)
@@ -374,9 +390,20 @@
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
+  cursor: grab;
+  touch-action: pan-x;
   /* respiro só à esquerda — a listagem "vaza" pela direita */
   padding: 4px 0 4px 22px;
   scroll-padding-left: 22px;
+}
+.m-hscroll.is-dragging {
+  cursor: grabbing;
+  scroll-behavior: auto;
+  scroll-snap-type: none;
+  user-select: none;
+}
+.m-hscroll.is-dragging > * {
+  pointer-events: none;
 }
 /* Esconde a barra de rolagem em todos os navegadores */
 .m-hscroll::-webkit-scrollbar {
@@ -572,19 +599,6 @@
 }
 
 /* Pílulas da Expansão Premium --------------------------------- */
-.m-expansao__visual {
-  width: 100%;
-  max-width: 420px;
-  margin: 28px auto 0;
-  border-radius: 22px;
-  overflow: hidden;
-  aspect-ratio: 582 / 554;
-}
-.m-expansao__visual img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
 .m-pill {
   width: 82vw;
   max-width: 420px;
@@ -630,19 +644,12 @@
 }
 .m-cta__watermark {
   position: absolute;
-  right: -60px;
-  bottom: -20px;
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
   width: 320px;
   opacity: 0.16;
   pointer-events: none;
-}
-.m-cta__img {
-  width: 76%;
-  max-width: 320px;
-  margin: 0 auto 26px;
-  display: block;
-  position: relative;
-  z-index: 1;
 }
 .m-cta h2 {
   position: relative;
@@ -673,7 +680,7 @@
 .m-footer__logo {
   width: 200px;
   max-width: 60%;
-  margin: 0 auto 30px;
+  margin: 0 0 30px;
   display: block;
 }
 .m-footer__cols {

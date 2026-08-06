@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Reveal from '../components/Reveal.jsx'
 import './mobile.css'
 import {
@@ -23,7 +23,6 @@ import {
   premiumModulos,
   premiumCertificado,
   watermarkCx,
-  atendente,
   logoBranco,
   icEmail,
   socialLinkedin,
@@ -125,6 +124,73 @@ function DragHint() {
       <span className="m-drag-hint__track">
         <span className="m-drag-hint__dot" />
       </span>
+    </div>
+  )
+}
+
+/* Carrossel horizontal com arraste (mouse) + scroll nativo (touch) */
+function HScroll({ children }) {
+  const ref = useRef(null)
+  const drag = useRef({ active: false, startX: 0, scrollLeft: 0, moved: false })
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
+    const onPointerDown = (e) => {
+      // Touch/pen já usam o overflow nativo; drag custom só no mouse
+      if (e.pointerType !== 'mouse' || e.button !== 0) return
+      drag.current = {
+        active: true,
+        startX: e.clientX,
+        scrollLeft: el.scrollLeft,
+        moved: false,
+      }
+      el.setPointerCapture(e.pointerId)
+      el.classList.add('is-dragging')
+    }
+
+    const onPointerMove = (e) => {
+      if (!drag.current.active) return
+      const dx = e.clientX - drag.current.startX
+      if (Math.abs(dx) > 4) drag.current.moved = true
+      el.scrollLeft = drag.current.scrollLeft - dx
+    }
+
+    const endDrag = () => {
+      if (!drag.current.active) return
+      drag.current.active = false
+      el.classList.remove('is-dragging')
+    }
+
+    // Evita clicar em CTAs depois de um arraste
+    const onClickCapture = (e) => {
+      if (!drag.current.moved) return
+      e.preventDefault()
+      e.stopPropagation()
+      drag.current.moved = false
+    }
+
+    el.addEventListener('pointerdown', onPointerDown)
+    el.addEventListener('pointermove', onPointerMove)
+    el.addEventListener('pointerup', endDrag)
+    el.addEventListener('pointercancel', endDrag)
+    el.addEventListener('lostpointercapture', endDrag)
+    el.addEventListener('click', onClickCapture, true)
+
+    return () => {
+      el.removeEventListener('pointerdown', onPointerDown)
+      el.removeEventListener('pointermove', onPointerMove)
+      el.removeEventListener('pointerup', endDrag)
+      el.removeEventListener('pointercancel', endDrag)
+      el.removeEventListener('lostpointercapture', endDrag)
+      el.removeEventListener('click', onClickCapture, true)
+    }
+  }, [])
+
+  return (
+    <div ref={ref} className="m-hscroll">
+      {children}
     </div>
   )
 }
@@ -242,7 +308,7 @@ function MobileEcossistema() {
       </Reveal>
 
       <DragHint />
-      <div className="m-hscroll">
+      <HScroll>
         {ECO_CARDS.map((c, i) => (
           <Reveal key={c.title} className="m-eco-card" delay={i * 70}>
             <img src={c.icon} alt="" />
@@ -251,7 +317,7 @@ function MobileEcossistema() {
           </Reveal>
         ))}
         <span className="m-hscroll__end" aria-hidden="true" />
-      </div>
+      </HScroll>
     </section>
   )
 }
@@ -266,7 +332,7 @@ function MobilePlanos() {
       </div>
 
       <DragHint />
-      <div className="m-hscroll">
+      <HScroll>
         {PLANS.map((p, i) => (
           <Reveal key={p.title} className="m-plan" delay={i * 80}>
             <div className="m-plan__header">
@@ -288,7 +354,7 @@ function MobilePlanos() {
           </Reveal>
         ))}
         <span className="m-hscroll__end" aria-hidden="true" />
-      </div>
+      </HScroll>
     </section>
   )
 }
@@ -296,7 +362,10 @@ function MobilePlanos() {
 /* ========================== EXPANSÃO ========================== */
 function MobileExpansao() {
   return (
-    <section className="m-section m-section--gray">
+    <section
+      className="m-section m-section--gray m-section--expansao"
+      style={{ '--expansao-bg': `url(${mulherEscritorio})` }}
+    >
       <div className="m-section__head">
         <Reveal as="span" className="m-eyebrow" delay={0}>EXPANSÃO PREMIUM</Reveal>
         <Reveal as="h2" className="m-title" delay={80}>Sua empresa cresce. Sua plataforma acompanha.</Reveal>
@@ -305,12 +374,8 @@ function MobileExpansao() {
         </Reveal>
       </div>
 
-      <Reveal className="m-expansao__visual" variant="fromLeft" delay={0}>
-        <img src={mulherEscritorio} alt="Profissional no escritório" />
-      </Reveal>
-
       <DragHint />
-      <div className="m-hscroll">
+      <HScroll>
         {FEATURES.map((f, i) => (
           <Reveal key={f.title} className="m-pill" delay={i * 60}>
             <img src={f.icon} alt="" />
@@ -321,7 +386,7 @@ function MobileExpansao() {
           </Reveal>
         ))}
         <span className="m-hscroll__end" aria-hidden="true" />
-      </div>
+      </HScroll>
     </section>
   )
 }
@@ -331,9 +396,6 @@ function MobileCtaFinal() {
   return (
     <section className="m-cta">
       <img className="m-cta__watermark" src={watermarkCx} alt="" aria-hidden="true" />
-      <Reveal className="m-cta__img" variant="fromRight" delay={120}>
-        <img src={atendente} alt="Atendente CONTABINEX" style={{ width: '100%', display: 'block' }} />
-      </Reveal>
       <Reveal as="h2" delay={0}>
         Pronto para dar o próximo passo na gestão do seu negócio?
       </Reveal>

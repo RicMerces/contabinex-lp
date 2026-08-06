@@ -111,7 +111,7 @@ export default function Hero() {
       <Reveal className="abs" delay={470} style={{ left: 762, top: 851, width: 398, height: 73 }}>
         <a
           className="box-cta box-cta--svg"
-          href="#"
+          href="#/abrir-empresa"
           style={{ position: 'absolute', inset: 0, borderRadius: 36.5, overflow: 'hidden' }}
         >
           <img src={btnAbrirEmpresa} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} />
@@ -136,7 +136,7 @@ export default function Hero() {
       <Reveal className="abs" delay={520} style={{ left: 1209, top: 851, width: 398, height: 73 }}>
         <a
           className="box-cta box-cta--light"
-          href="#"
+          href="#/trocar-contador"
           style={{ position: 'absolute', inset: 0, background: 'var(--teal-light)', borderRadius: 60, overflow: 'hidden' }}
         >
           <img src={icTrocar} alt="" style={{ position: 'absolute', left: 20, top: '50%', transform: 'translateY(-50%)', width: 56, height: 46 }} />

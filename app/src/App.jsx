@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Backgrounds from './components/Backgrounds.jsx'
 import Header from './components/Header.jsx'
 import Hero from './components/Hero.jsx'
@@ -8,6 +8,8 @@ import Expansao from './components/Expansao.jsx'
 import CtaFinal from './components/CtaFinal.jsx'
 import Footer from './components/Footer.jsx'
 import MobileApp from './mobile/MobileApp.jsx'
+import LeadCapture from './screens/LeadCapture.jsx'
+import useStageScale from './hooks/useStageScale.js'
 
 const DESIGN_W = 1920
 const DESIGN_H = 5455
@@ -15,6 +17,12 @@ const DESIGN_H = 5455
 // Abaixo desta largura (celular) troca o "palco" escalado pelo layout móvel.
 // Tablet e desktop (>= 768px) continuam no palco escalado, como antes.
 const MOBILE_BREAKPOINT = 767
+
+// Rotas por hash (sem dependência de router). Cada hash renderiza uma tela.
+const ROUTES = {
+  '#/trocar-contador': { variant: 'contador' },
+  '#/abrir-empresa': { variant: 'empresa' },
+}
 
 /** Observa a media query e retorna true em telas móveis. */
 function useIsMobile() {
@@ -32,50 +40,21 @@ function useIsMobile() {
   return isMobile
 }
 
-/**
- * Escala o "palco" de 1920px para a largura da janela, mantendo
- * exatamente o grid, as proporções e o espaçamento do Figma.
- */
-function useStageScale() {
-  const canvasRef = useRef(null)
-  const [scale, setScale] = useState(1)
+/** Rota atual baseada em window.location.hash. */
+function useHashRoute() {
+  const [hash, setHash] = useState(() => (typeof window !== 'undefined' ? window.location.hash : ''))
 
-  useLayoutEffect(() => {
-    const el = canvasRef.current
-    if (!el) return
-
-    const update = () => {
-      const w = el.clientWidth
-      setScale(w / DESIGN_W)
-    }
-
-    update()
-    const ro = new ResizeObserver(update)
-    ro.observe(el)
-    window.addEventListener('resize', update)
-    return () => {
-      ro.disconnect()
-      window.removeEventListener('resize', update)
-    }
+  useEffect(() => {
+    const onChange = () => setHash(window.location.hash)
+    window.addEventListener('hashchange', onChange)
+    return () => window.removeEventListener('hashchange', onChange)
   }, [])
 
-  return { canvasRef, scale }
+  return hash
 }
 
-export default function App() {
-  const isMobile = useIsMobile()
-  const { canvasRef, scale } = useStageScale()
-
-  // Ajusta a altura do wrapper para acompanhar o palco escalado
-  useEffect(() => {
-    if (canvasRef.current) {
-      canvasRef.current.style.height = `${DESIGN_H * scale}px`
-    }
-  }, [scale, canvasRef])
-
-  if (isMobile) {
-    return <MobileApp />
-  }
+function Landing() {
+  const { canvasRef, scale } = useStageScale(DESIGN_W, DESIGN_H)
 
   return (
     <div className="canvas" ref={canvasRef}>
@@ -91,4 +70,25 @@ export default function App() {
       </div>
     </div>
   )
+}
+
+export default function App() {
+  const isMobile = useIsMobile()
+  const route = useHashRoute()
+
+  // Toda troca de rota começa no topo (evita cair no meio da nova tela).
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [route])
+
+  if (isMobile) {
+    return <MobileApp />
+  }
+
+  const screen = ROUTES[route]
+  if (screen) {
+    return <LeadCapture variant={screen.variant} />
+  }
+
+  return <Landing />
 }
