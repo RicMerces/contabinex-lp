@@ -138,9 +138,6 @@ export default function Expansao() {
           </div>
         </Reveal>
       ))}
-
-      {/* Divisória inferior */}
-      <Reveal className="abs" delay={0} style={{ left: 800, top: 3750, width: 320, height: 3, background: 'var(--teal)' }} />
     </>
   )
 }

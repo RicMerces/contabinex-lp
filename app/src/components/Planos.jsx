@@ -170,29 +170,30 @@ export default function Planos() {
                 background: 'var(--navy)',
                 borderRadius: 40,
                 overflow: 'hidden',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 12,
+                padding: '0 24px',
+                boxSizing: 'border-box',
               }}
             >
               <span
                 style={{
-                  position: 'absolute',
-                  left: 28,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
                   color: 'var(--white)',
                   fontWeight: 700,
-                  fontSize: 18,
-                  lineHeight: '25px',
+                  fontSize: 16,
+                  lineHeight: '20px',
                   letterSpacing: '-0.72px',
                   whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  minWidth: 0,
                 }}
               >
                 {p.ctaText}
               </span>
-              <img
-                src={icArrow}
-                alt=""
-                style={{ position: 'absolute', right: 18, top: '50%', transform: 'translateY(-50%)', width: 34, height: 34 }}
-              />
+              <img src={icArrow} alt="" style={{ width: 34, height: 34, flexShrink: 0 }} />
             </a>
           </div>
         </Reveal>
