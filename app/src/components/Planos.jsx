@@ -15,6 +15,7 @@ const PLANS = [
       'Suporte e orientação por Inteligência Artificial',
     ],
     ctaText: 'Ativar Plano MEI',
+    ctaHref: '#/abrir-empresa', // Funil A — Nova Abertura
   },
   {
     cardLeft: 747,
@@ -28,6 +29,7 @@ const PLANS = [
       'Atendimento digital e suporte por IA integrada',
     ],
     ctaText: 'Selecionar Simples Nacional',
+    ctaHref: '#/abrir-empresa', // Funil A — Nova Abertura
   },
   {
     cardLeft: 1226,
@@ -41,6 +43,7 @@ const PLANS = [
       'Atendimento digital especializado',
     ],
     ctaText: 'Consultar Minha Categoria',
+    ctaHref: '#/descobrir-plano', // Funil C — Triagem com IA
   },
 ]
 
@@ -154,7 +157,7 @@ export default function Planos() {
 
             <a
               className="box-cta box-cta--navy abs"
-              href="#"
+              href={p.ctaHref}
               style={{
                 left: CONTENT_X,
                 top: CTA_TOP - CARD_TOP,

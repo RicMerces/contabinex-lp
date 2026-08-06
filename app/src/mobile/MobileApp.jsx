@@ -347,10 +347,12 @@ function MobilePlanos() {
                 </div>
               ))}
             </div>
-            <a className="m-btn m-btn--navy m-plan__cta" href="#">
-              <span>{p.ctaText}</span>
-              <img src={icArrow} alt="" />
-            </a>
+            <div className="m-plan__footer">
+              <a className="m-btn m-btn--navy m-plan__cta" href="#">
+                <span>{p.ctaText}</span>
+                <img src={icArrow} alt="" />
+              </a>
+            </div>
           </Reveal>
         ))}
         <span className="m-hscroll__end" aria-hidden="true" />

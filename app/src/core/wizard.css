@@ -1,0 +1,234 @@
+/* ============================================================
+   CONTABINEX — Telas de FUNIL (wizard), layout MÓVEL
+   Coluna única centralizada. Reaproveita os tokens de index.css.
+   Usado por todas as telas dentro de <MobileShell>.
+   ============================================================ */
+
+.wz-root {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: var(--white);
+  color: var(--navy);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header fixo: voltar + logo centralizado */
+.wz-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid rgba(51, 55, 111, 0.08);
+}
+.wz-back {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: var(--teal-light);
+  color: var(--navy);
+  font-size: 22px;
+  line-height: 1;
+}
+.wz-header__logo {
+  justify-self: center;
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Conteúdo */
+.wz-main {
+  flex: 1;
+  padding: 30px 22px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.wz-main--left {
+  text-align: left;
+  align-items: stretch;
+}
+
+.wz-title {
+  color: var(--navy);
+  font-weight: 700;
+  font-size: clamp(26px, 8vw, 34px);
+  line-height: 1.15;
+  letter-spacing: -1px;
+}
+.wz-divider {
+  width: 120px;
+  height: 3px;
+  background: var(--teal);
+  margin: 20px 0;
+  border-radius: 2px;
+}
+.wz-main:not(.wz-main--left) .wz-divider {
+  margin-left: auto;
+  margin-right: auto;
+}
+.wz-heading {
+  color: var(--gray);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.6px;
+}
+.wz-sub {
+  color: var(--gray);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.45;
+  margin-top: 8px;
+  max-width: 560px;
+}
+
+/* Formulário */
+.wz-form {
+  width: 100%;
+  max-width: 520px;
+  margin: 26px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.wz-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+.wz-field label {
+  color: var(--gray);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.3px;
+}
+.wz-field input,
+.wz-field select,
+.wz-field textarea {
+  width: 100%;
+  min-height: 54px;
+  border: 1px solid #868686;
+  border-radius: 12px;
+  padding: 0 16px;
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--navy);
+  background: var(--white);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.wz-field textarea {
+  padding: 14px 16px;
+  min-height: 96px;
+  resize: vertical;
+}
+.wz-field input:focus,
+.wz-field select:focus,
+.wz-field textarea:focus {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(98, 171, 178, 0.18);
+}
+
+/* Ação: Avançar + passo */
+.wz-actions {
+  width: 100%;
+  max-width: 520px;
+  margin: 26px auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.wz-step {
+  color: var(--teal);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.4px;
+}
+.wz-btn {
+  width: 100%;
+  min-height: 54px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+.wz-btn:active {
+  transform: scale(0.98);
+}
+.wz-btn--teal {
+  background: var(--teal);
+  color: var(--white);
+}
+.wz-btn--navy {
+  background: var(--navy);
+  color: var(--teal-light);
+}
+.wz-btn--light {
+  background: var(--teal-light);
+  color: var(--navy);
+}
+.wz-btn--outline {
+  background: var(--white);
+  border: 2px solid var(--teal);
+  color: var(--teal);
+}
+
+/* Barra do assistente (rodapé) */
+.wz-assistant {
+  width: 100%;
+  border-top: 1px solid rgba(98, 171, 178, 0.4);
+  margin-top: 34px;
+  padding-top: 26px;
+  display: flex;
+  justify-content: center;
+}
+.wz-assistant a {
+  width: 100%;
+  max-width: 520px;
+  min-height: 60px;
+  border-radius: 14px;
+  background: var(--teal-light);
+  color: var(--gray);
+  font-weight: 700;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 12px 18px;
+}
+
+/* Marca d'água opcional em telas de resultado/confirmação */
+.wz-watermark {
+  position: absolute;
+  right: -40px;
+  bottom: -30px;
+  width: 240px;
+  opacity: 0.14;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wz-btn,
+  .wz-field input,
+  .wz-field select { transition: none; }
+}
