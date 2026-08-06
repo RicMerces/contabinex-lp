@@ -569,10 +569,10 @@
 }
 .m-plan__header {
   background: var(--navy);
-  padding: 22px 24px;
-  border-radius: 14px 14px 0 0;
-  /* altura mínima cobrindo título (2 linhas) + subtítulo (2 linhas) */
-  min-height: 118px;
+  padding: 22px 24px 10px;
+  margin: 0;
+  width: 100%;
+  border-radius: 17px 17px 0 0; /* topo acompanha o card; base reta */
   box-sizing: border-box;
   flex-shrink: 0;
 }

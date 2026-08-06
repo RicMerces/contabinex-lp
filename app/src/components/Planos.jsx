@@ -49,8 +49,8 @@ const PLANS = [
 
 const CARD_TOP = 2104
 const CARD_HEIGHT = 609
-const HEADER_TOP = 2154
-const HEADER_INSET = 10
+/* Encosta na borda do card (3px = espessura da borda) — igual ao mobile */
+const HEADER_INSET = 3
 const CONTENT_X = 58
 const BODY_TOP = 2307
 const CTA_TOP = 2618
@@ -114,15 +114,16 @@ export default function Planos() {
               className="box-plan__header abs"
               style={{
                 left: HEADER_INSET,
-                top: HEADER_TOP - CARD_TOP,
+                top: HEADER_INSET,
                 width: p.cardWidth - HEADER_INSET * 2,
-                /* Preenche até o início dos benefícios — headers alinhados entre cards */
-                minHeight: BODY_TOP - HEADER_TOP,
                 boxSizing: 'border-box',
-                padding: '16px 20px',
+                padding: '16px 20px 10px',
                 background: 'var(--navy)',
-                borderTopLeftRadius: 14,
-                borderTopRightRadius: 14,
+                /* Topo acompanha o card; base reta — igual ao mobile */
+                borderTopLeftRadius: 17,
+                borderTopRightRadius: 17,
+                borderBottomLeftRadius: 0,
+                borderBottomRightRadius: 0,
               }}
             >
               <p
@@ -173,8 +174,8 @@ export default function Planos() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                gap: 12,
-                padding: '0 24px',
+                gap: 8,
+                padding: '0 20px',
                 boxSizing: 'border-box',
               }}
             >
@@ -182,9 +183,9 @@ export default function Planos() {
                 style={{
                   color: 'var(--white)',
                   fontWeight: 700,
-                  fontSize: 16,
+                  fontSize: 15,
                   lineHeight: '20px',
-                  letterSpacing: '-0.72px',
+                  letterSpacing: '-0.4px',
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
@@ -193,7 +194,7 @@ export default function Planos() {
               >
                 {p.ctaText}
               </span>
-              <img src={icArrow} alt="" style={{ width: 34, height: 34, flexShrink: 0 }} />
+              <img src={icArrow} alt="" style={{ width: 30, height: 30, flexShrink: 0 }} />
             </a>
           </div>
         </Reveal>
