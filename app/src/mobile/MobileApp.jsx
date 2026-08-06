@@ -39,9 +39,9 @@ const NAV_LINKS = [
 ]
 
 const HERO_CTAS = [
-  { icon: icEncontrar, label: 'Encontrar o Plano Ideal para Minha Empresa', href: '#planos' },
-  { icon: 'abrir', label: 'Abrir uma Empresa', href: '#' },
-  { icon: icTrocar, label: 'Trocar de Contador', href: '#' },
+  { icon: icEncontrar, label: 'Encontrar o Plano Ideal para Minha Empresa', href: '#/descobrir-plano' },
+  { icon: 'abrir', label: 'Abrir uma Empresa', href: '#/abrir-empresa' },
+  { icon: icTrocar, label: 'Trocar de Contador', href: '#/trocar-contador' },
 ]
 
 function IconAbrirEmpresa() {
@@ -75,6 +75,7 @@ const PLANS = [
       'Suporte e orientação por Inteligência Artificial',
     ],
     ctaText: 'Ativar Plano MEI',
+    ctaHref: '#/abrir-empresa',
   },
   {
     title: 'Plano Simples Nacional',
@@ -86,6 +87,7 @@ const PLANS = [
       'Atendimento digital e suporte por IA integrada',
     ],
     ctaText: 'Selecionar Simples Nacional',
+    ctaHref: '#/abrir-empresa',
   },
   {
     title: 'Plano Classes Profissionais',
@@ -97,6 +99,7 @@ const PLANS = [
       'Atendimento digital especializado',
     ],
     ctaText: 'Consultar Minha Categoria',
+    ctaHref: '#/descobrir-plano',
   },
 ]
 
@@ -348,7 +351,7 @@ function MobilePlanos() {
               ))}
             </div>
             <div className="m-plan__footer">
-              <a className="m-btn m-btn--navy m-plan__cta" href="#">
+              <a className="m-btn m-btn--navy m-plan__cta" href={p.ctaHref || '#'}>
                 <span>{p.ctaText}</span>
                 <img src={icArrow} alt="" />
               </a>

@@ -43,7 +43,7 @@ function Desktop() {
         <img src={alertTriangle} alt="" style={{ width: 80, height: 80 }} />
         <p style={{ color: 'var(--navy)', fontWeight: 600, fontSize: 40, letterSpacing: '-1.2px' }}>{HEADING}</p>
         <p style={{ color: 'var(--gray)', fontWeight: 600, fontSize: 24, letterSpacing: '-0.72px', lineHeight: 'normal' }}>{BODY}</p>
-        <a className="box-cta box-cta--light" href={CTA} style={{ background: 'var(--teal)', color: 'var(--white)', fontWeight: 600, fontSize: 24, letterSpacing: '-0.72px', padding: '20px 40px', borderRadius: 40, display: 'inline-flex' }}>
+        <a className="box-cta" href={CTA} style={{ background: 'var(--teal)', color: 'var(--white)', fontWeight: 600, fontSize: 24, letterSpacing: '-0.72px', padding: '20px 40px', borderRadius: 40, display: 'inline-flex' }}>
           {CTA_LABEL}
         </a>
         <a href={BACK} style={{ color: 'var(--teal)', fontWeight: 600, fontSize: 18, letterSpacing: '-0.54px' }}>Voltar e corrigir meus dados</a>
