@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import Reveal from '../components/Reveal.jsx'
+import { scrollToId, scrollToTop } from '../utils/scroll.js'
 import './mobile.css'
 import {
   logoContabinex,
@@ -32,11 +33,23 @@ import {
 } from '../assets/index.js'
 
 /* ---- Dados (mesma cópia do layout desktop) ---- */
+/* Mesmas âncoras do Header desktop (sec-*), com ids das sections mobile */
 const NAV_LINKS = [
-  { label: 'Solicitar Proposta', href: '#' },
-  { label: 'Nossas Soluções', href: '#solucoes' },
-  { label: 'Planos', href: '#planos' },
+  { label: 'Solicitar Proposta', id: 'contato' },
+  { label: 'Nossas Soluções', id: 'solucoes' },
+  { label: 'Planos', id: 'planos' },
 ]
+const MOBILE_HEADER_OFFSET = 80
+
+/** Fecha overlays e rola até a section (sem alterar o hash — não conflita com funis). */
+function goToSection(id, { closeMenu } = {}) {
+  if (typeof closeMenu === 'function') closeMenu()
+  document.body.style.overflow = ''
+  // Espera o menu/overlay saírem do fluxo antes de medir a posição
+  window.setTimeout(() => {
+    scrollToId(id, { offset: MOBILE_HEADER_OFFSET })
+  }, 80)
+}
 
 const HERO_CTAS = [
   { icon: icEncontrar, label: 'Encontrar o Plano Ideal para Minha Empresa', href: '#/descobrir-plano' },
@@ -110,7 +123,12 @@ const FEATURES = [
   { icon: premiumCertificado, title: 'Certificado Digital', body: 'Emissão e renovação individual integrada e desimpedida para PF ou PJ.' },
 ]
 
-const NAV_SERVICOS = ['Nossas Soluções', 'Nossos Planos', 'Abrir uma Empresa', 'Trocar de Contador']
+const NAV_SERVICOS = [
+  { label: 'Nossas Soluções', id: 'solucoes' },
+  { label: 'Nossos Planos', id: 'planos' },
+  { label: 'Abrir uma Empresa', href: '#/abrir-empresa' },
+  { label: 'Trocar de Contador', href: '#/trocar-contador' },
+]
 const NAV_INSTITUCIONAL = ['Política de Privacidade', 'Termos de Uso', 'Central de Ajuda', 'Trabalhe Conosco', 'Segurança de Dados']
 const SOCIALS = [
   { icon: socialLinkedin, alt: 'LinkedIn' },
@@ -193,7 +211,8 @@ function HScroll({ children }) {
 
   return (
     <div ref={ref} className="m-hscroll">
-      {children}
+      {/* Track interna: overflow fica no pai; stretch da altura funciona no flex aqui */}
+      <div className="m-hscroll__track">{children}</div>
     </div>
   )
 }
@@ -210,10 +229,21 @@ function MobileHeader() {
 
   const close = () => setOpen(false)
 
+  const onLogoClick = (e) => {
+    e.preventDefault()
+    close()
+    document.body.style.overflow = ''
+    if (window.scrollY === 0) {
+      window.location.href = '/'
+      return
+    }
+    window.setTimeout(() => scrollToTop(), 80)
+  }
+
   return (
     <>
       <header className="m-header">
-        <a href="/" aria-label="Início" onClick={close}>
+        <a href="/" aria-label="Voltar ao início" onClick={onLogoClick}>
           <img className="m-header__logo" src={logoContabinex} alt="CONTABINEX" />
         </a>
         <button
@@ -231,16 +261,21 @@ function MobileHeader() {
       <div className={`m-menu__overlay${open ? ' is-open' : ''}`} onClick={close} />
       <nav className={`m-menu${open ? ' is-open' : ''}`} aria-hidden={!open}>
         {NAV_LINKS.map((l) => (
-          <a key={l.label} className="m-menu__link" href={l.href} onClick={close}>
+          <button
+            key={l.label}
+            type="button"
+            className="m-menu__link"
+            onClick={() => goToSection(l.id, { closeMenu: close })}
+          >
             {l.label}
-          </a>
+          </button>
         ))}
         <div className="m-menu__actions">
-          <button className="m-btn m-btn--outline" onClick={close}>
+          <button type="button" className="m-btn m-btn--outline" onClick={close}>
             PESQUISAR
             <img src={icSearch} alt="" />
           </button>
-          <button className="m-btn m-btn--navy" onClick={close}>
+          <button type="button" className="m-btn m-btn--navy" onClick={close}>
             <img src={icLogin} alt="" style={{ filter: 'brightness(0) invert(1)' }} />
             LOGIN
           </button>
@@ -399,7 +434,7 @@ function MobileExpansao() {
 /* ========================== CTA FINAL ========================== */
 function MobileCtaFinal() {
   return (
-    <section className="m-cta">
+    <section id="contato" className="m-cta">
       <img className="m-cta__watermark" src={watermarkCx} alt="" aria-hidden="true" />
       <Reveal as="h2" delay={0}>
         Pronto para dar o próximo passo na gestão do seu negócio?
@@ -423,7 +458,18 @@ function MobileFooter() {
         <div className="m-footer__col">
           <h4>Serviços</h4>
           {NAV_SERVICOS.map((item) => (
-            <a key={item} href="#">{item}</a>
+            item.id ? (
+              <button
+                key={item.label}
+                type="button"
+                className="m-footer__link"
+                onClick={() => goToSection(item.id)}
+              >
+                {item.label}
+              </button>
+            ) : (
+              <a key={item.label} href={item.href}>{item.label}</a>
+            )
           ))}
         </div>
         <div className="m-footer__col">

@@ -9,7 +9,7 @@ import CtaFinal from './components/CtaFinal.jsx'
 import Footer from './components/Footer.jsx'
 import MobileApp from './mobile/MobileApp.jsx'
 import useStageScale from './hooks/useStageScale.js'
-import { useIsMobile, useHashRoute, FunnelStateProvider } from './core/index.js'
+import { useIsMobile, useHashRoute, FunnelStateProvider, normalizeHash } from './core/index.js'
 import { matchRoute } from './routes.js'
 
 const DESIGN_W = 1920
@@ -40,8 +40,11 @@ function Landing() {
 export default function App() {
   const route = useHashRoute()
 
-  // Toda troca de rota começa no topo (evita cair no meio da nova tela).
+  // Reseta scroll ao entrar em funil (#/...) ou na landing limpa.
+  // Não mexe em fragments in-page — a nav mobile/desktop só faz scroll.
   useEffect(() => {
+    const h = normalizeHash(route)
+    if (h && !h.startsWith('#/')) return
     window.scrollTo(0, 0)
   }, [route])
 

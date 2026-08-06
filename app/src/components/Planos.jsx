@@ -58,9 +58,10 @@ const CTA_TOP = 2618
 export default function Planos() {
   return (
     <>
+      {/* Âncora estável (sem transform do Reveal — evita scroll bugado na nav) */}
+      <div id="sec-planos" className="abs" aria-hidden="true" style={{ left: 0, top: 1940, width: 1, height: 1 }} />
       {/* Título da seção */}
       <Reveal
-        id="sec-planos"
         as="p"
         variant="cx"
         className="abs"
@@ -115,6 +116,8 @@ export default function Planos() {
                 left: HEADER_INSET,
                 top: HEADER_TOP - CARD_TOP,
                 width: p.cardWidth - HEADER_INSET * 2,
+                /* Preenche até o início dos benefícios — headers alinhados entre cards */
+                minHeight: BODY_TOP - HEADER_TOP,
                 boxSizing: 'border-box',
                 padding: '16px 20px',
                 background: 'var(--navy)',

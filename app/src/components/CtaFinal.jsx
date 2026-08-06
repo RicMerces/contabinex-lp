@@ -20,9 +20,10 @@ export default function CtaFinal() {
         <img src={atendente} alt="Atendente CONTABINEX" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       </Reveal>
 
+      {/* Âncora estável (sem transform do Reveal — evita scroll bugado na nav) */}
+      <div id="sec-contato" className="abs" aria-hidden="true" style={{ left: 0, top: 3860, width: 1, height: 1 }} />
       {/* Chamada */}
       <Reveal
-        id="sec-contato"
         as="h2"
         className="abs"
         delay={0}

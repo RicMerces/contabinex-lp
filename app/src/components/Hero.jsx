@@ -1,5 +1,6 @@
 import { heroBg, engenheiros, btnAbrirEmpresa, icEncontrar, icTrocar } from '../assets/index.js'
 import Reveal from './Reveal.jsx'
+import { scrollToId } from '../utils/scroll.js'
 
 export default function Hero() {
   return (
@@ -84,10 +85,11 @@ export default function Hero() {
 
       {/* CTA 1 — Encontrar o Plano Ideal */}
       <Reveal className="abs" delay={420} style={{ left: 314, top: 851, width: 398, height: 73 }}>
-        <a
+        <button
+          type="button"
           className="box-cta box-cta--light"
-          href="#planos"
-          style={{ position: 'absolute', inset: 0, background: 'var(--teal-light)', borderRadius: 60, overflow: 'hidden' }}
+          onClick={() => scrollToId('sec-planos')}
+          style={{ position: 'absolute', inset: 0, background: 'var(--teal-light)', borderRadius: 60, overflow: 'hidden', width: '100%', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}
         >
           <img src={icEncontrar} alt="" style={{ position: 'absolute', left: 27, top: '50%', transform: 'translateY(-50%)', width: 44, height: 50 }} />
           <span
@@ -104,7 +106,7 @@ export default function Hero() {
           >
             Encontrar o Plano Ideal<br />para Minha Empresa
           </span>
-        </a>
+        </button>
       </Reveal>
 
       {/* CTA 2 — Abrir uma Empresa (fundo em SVG do Figma) */}

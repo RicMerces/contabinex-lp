@@ -188,15 +188,22 @@ button {
   background: #454a8a;
 }
 
-.header-nav a {
+.header-nav a,
+.header-nav button {
   color: var(--gray);
   font-weight: 600;
   font-size: 24px;
   white-space: nowrap;
   transition: color 0.2s ease;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
 }
 
-.header-nav a:hover {
+.header-nav a:hover,
+.header-nav button:hover {
   color: #62abb2;
 }
 
@@ -246,7 +253,8 @@ button {
   .box-card__surface,
   .box-plan__body,
   .box-plan__header,
-  .header-nav a {
+  .header-nav a,
+  .header-nav button {
     transition: none;
   }
 

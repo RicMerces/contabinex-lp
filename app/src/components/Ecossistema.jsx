@@ -49,8 +49,10 @@ const ICON_CENTER_Y = 1544
 export default function Ecossistema() {
   return (
     <>
+      {/* Âncora estável (sem transform do Reveal — evita scroll bugado na nav) */}
+      <div id="sec-solucoes" className="abs" aria-hidden="true" style={{ left: 0, top: 980, width: 1, height: 1 }} />
       {/* Linha divisória superior */}
-      <Reveal id="sec-solucoes" className="abs" delay={0} style={{ left: 800, top: 1018, width: 320, height: 3, background: 'var(--teal)' }} />
+      <Reveal className="abs" delay={0} style={{ left: 800, top: 1018, width: 320, height: 3, background: 'var(--teal)' }} />
 
       {/* Título da seção */}
       <Reveal
