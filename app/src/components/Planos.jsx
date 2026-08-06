@@ -60,6 +60,7 @@ export default function Planos() {
     <>
       {/* Título da seção */}
       <Reveal
+        id="sec-planos"
         as="p"
         variant="cx"
         className="abs"

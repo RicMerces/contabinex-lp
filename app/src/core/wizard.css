@@ -109,6 +109,14 @@
   gap: 8px;
   text-align: left;
 }
+.wz-field--center {
+  text-align: center;
+}
+.wz-field--center input,
+.wz-field--center select,
+.wz-field--center textarea {
+  text-align: center;
+}
 .wz-field label {
   color: var(--gray);
   font-weight: 600;

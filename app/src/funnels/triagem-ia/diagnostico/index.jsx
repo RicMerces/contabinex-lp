@@ -7,50 +7,42 @@ import { DesktopStage, Responsive, useFunnel, navigate, Logo, Watermark, MobileS
 const DESIGN_W = 1920
 const DESIGN_H = 1400
 
-// Perguntas + opções (copy exata do Figma). Coordenadas desktop por opção.
+// Perguntas + opções (copy do Figma). Layout em fluxo — gap controla o espaçamento.
 const QUESTIONS = [
   {
     id: 'faturamento',
     lead: 'Perfeito! Pergunta 1 de 4:',
     text: 'Qual é a estimativa de faturamento bruto do seu negócio por ano?',
-    labelTop: 555,
-    boxLeft: 165,
     options: [
-      { value: 'ate81', label: 'Até R$ 81 mil / ano', top: 621 },
-      { value: 'acima81', label: 'Acima de R$ 81 mil / ano', top: 656 },
+      { value: 'ate81', label: 'Até R$ 81 mil / ano' },
+      { value: 'acima81', label: 'Acima de R$ 81 mil / ano' },
     ],
   },
   {
     id: 'regulamentada',
     lead: 'Ótimo. Pergunta 2 de 4:',
-    text: 'A sua atividade exige formação superior e registro em conselho de classe (como CRM, OAB, CREA, CRP)',
-    labelTop: 725,
-    boxLeft: 165,
+    text: 'A sua atividade exige formação superior e registro em conselho de classe (como CRM, OAB, CREA, CRP)?',
     options: [
-      { value: 'sim', label: 'Sim, sou profissional liberal regulamentado', top: 791 },
-      { value: 'nao', label: 'Não, é uma atividade comum (Comércio, Serviços Gerais, TI)', top: 825 },
+      { value: 'sim', label: 'Sim, sou profissional liberal regulamentado' },
+      { value: 'nao', label: 'Não, é uma atividade comum (Comércio, Serviços Gerais, TI)' },
     ],
   },
   {
     id: 'socios',
     lead: 'Entendido. Pergunta 3 de 4:',
     text: 'Em relação à estrutura dos donos, você terá sócios no negócio?',
-    labelTop: 902,
-    boxLeft: 167,
     options: [
-      { value: 'nao', label: 'Não, serei o único titular', top: 963 },
-      { value: 'sim', label: 'Sim, teremos mais sócios', top: 997 },
+      { value: 'nao', label: 'Não, serei o único titular' },
+      { value: 'sim', label: 'Sim, teremos mais sócios' },
     ],
   },
   {
     id: 'funcionarios',
     lead: 'Para finalizar! Pergunta 4 de 4:',
     text: 'Quantos funcionários registrados você planeja contratar inicialmente?',
-    labelTop: 1074,
-    boxLeft: 169,
     options: [
-      { value: 'ate1', label: 'Nenhum ou no máximo 1 funcionário', top: 1137 },
-      { value: '2mais', label: '2 ou mais funcionários', top: 1171 },
+      { value: 'ate1', label: 'Nenhum ou no máximo 1 funcionário' },
+      { value: '2mais', label: '2 ou mais funcionários' },
     ],
   },
 ]
@@ -115,42 +107,45 @@ function Desktop() {
     <DesktopStage designW={DESIGN_W} designH={DESIGN_H}>
       <Logo left={124} top={119} />
       <Watermark left={1089} top={199} />
-      <h1 className="abs" style={{ left: 163, top: 329, color: 'var(--navy)', fontWeight: 700, fontSize: 48, letterSpacing: '-0.96px', whiteSpace: 'nowrap' }}>
+      <h1 className="abs" style={{ left: 163, top: 300, color: 'var(--navy)', fontWeight: 700, fontSize: 48, letterSpacing: '-0.96px', whiteSpace: 'nowrap' }}>
         Meu tipo de Empresa
       </h1>
-      <div className="abs" style={{ left: 163, top: 435, width: 320, height: 3, background: 'var(--teal)' }} />
+      <div className="abs" style={{ left: 163, top: 390, width: 320, height: 3, background: 'var(--teal)' }} />
 
-      {QUESTIONS.map((q) => (
-        <div key={q.id}>
-          <div className="abs" style={{ left: q.boxLeft - 2, top: q.labelTop, width: 900, color: 'var(--gray)', fontSize: 20, fontWeight: 600, letterSpacing: '-0.6px' }}>
-            <p style={{ color: 'var(--teal)', fontWeight: 700, lineHeight: 1.2 }}>{q.lead}</p>
-            <p style={{ lineHeight: 1.2 }}>{q.text}</p>
+      <div className="abs" style={{ left: 163, top: 430, width: 1200, display: 'flex', flexDirection: 'column', gap: 28 }}>
+        {QUESTIONS.map((q) => (
+          <div key={q.id}>
+            <p style={{ color: 'var(--teal)', fontWeight: 700, fontSize: 20, letterSpacing: '-0.6px', lineHeight: 1.2, margin: 0 }}>{q.lead}</p>
+            <p style={{ color: 'var(--gray)', fontWeight: 600, fontSize: 20, letterSpacing: '-0.6px', lineHeight: 1.3, margin: '2px 0 0' }}>{q.text}</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 12 }}>
+              {q.options.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => select(q.id, opt.value)}
+                  style={{ display: 'flex', alignItems: 'center', gap: 16, background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left' }}
+                >
+                  <Checkbox selected={answers[q.id] === opt.value} />
+                  <span style={{ color: 'var(--gray)', fontSize: 20, fontWeight: 500, letterSpacing: '-0.6px' }}>{opt.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
-          {q.options.map((opt) => (
-            <button
-              key={opt.value}
-              type="button"
-              onClick={() => select(q.id, opt.value)}
-              className="abs"
-              style={{ left: q.boxLeft, top: opt.top, display: 'flex', alignItems: 'center', gap: 18, background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left' }}
-            >
-              <Checkbox selected={answers[q.id] === opt.value} />
-              <span style={{ color: 'var(--gray)', fontSize: 20, fontWeight: 500, letterSpacing: '-0.6px', whiteSpace: 'nowrap' }}>{opt.label}</span>
-            </button>
-          ))}
-        </div>
-      ))}
+        ))}
 
-      <button
-        type="button"
-        onClick={submit}
-        disabled={!complete}
-        className="abs box-btn"
-        style={{ left: 163, top: 1240, width: 320, height: 56, background: 'var(--teal)', borderRadius: 8, border: 'none', color: 'var(--white)', fontWeight: 700, fontSize: 18, letterSpacing: '-0.36px', cursor: complete ? 'pointer' : 'not-allowed', opacity: complete ? 1 : 0.5, boxShadow: '0px 4px 4px rgba(0,0,0,0.1)' }}
-      >
-        Descobrir meu perfil
-      </button>
-      <span className="abs" style={{ left: 163, top: 1308, color: '#868686', fontSize: 14, fontWeight: 600, letterSpacing: '-0.28px' }}>2/4</span>
+        <div style={{ marginTop: 8 }}>
+          <button
+            type="button"
+            onClick={submit}
+            disabled={!complete}
+            className="box-btn"
+            style={{ width: 320, height: 56, background: 'var(--teal)', borderRadius: 8, border: 'none', color: 'var(--white)', fontWeight: 700, fontSize: 18, letterSpacing: '-0.36px', cursor: complete ? 'pointer' : 'not-allowed', opacity: complete ? 1 : 0.5, boxShadow: '0px 4px 4px rgba(0,0,0,0.1)' }}
+          >
+            Descobrir meu perfil
+          </button>
+          <p style={{ color: '#868686', fontSize: 14, fontWeight: 600, letterSpacing: '-0.28px', margin: '12px 0 0' }}>2/4</p>
+        </div>
+      </div>
     </DesktopStage>
   )
 }
@@ -161,25 +156,27 @@ function Mobile() {
     <MobileShell back="#/descobrir-plano" align="left">
       <h1 className="wz-title">Meu tipo de Empresa</h1>
       <div className="wz-divider" />
-      {QUESTIONS.map((q) => (
-        <div key={q.id} style={{ marginTop: 26 }}>
-          <p style={{ color: 'var(--teal)', fontWeight: 700, fontSize: 16 }}>{q.lead}</p>
-          <p style={{ color: 'var(--gray)', fontWeight: 600, fontSize: 16, lineHeight: 1.35, marginTop: 4 }}>{q.text}</p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 14 }}>
-            {q.options.map((opt) => (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => select(q.id, opt.value)}
-                style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left' }}
-              >
-                <Checkbox selected={answers[q.id] === opt.value} />
-                <span style={{ color: 'var(--gray)', fontSize: 15, fontWeight: 500, lineHeight: 1.3 }}>{opt.label}</span>
-              </button>
-            ))}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 18, marginTop: 8 }}>
+        {QUESTIONS.map((q) => (
+          <div key={q.id}>
+            <p style={{ color: 'var(--teal)', fontWeight: 700, fontSize: 15, margin: 0 }}>{q.lead}</p>
+            <p style={{ color: 'var(--gray)', fontWeight: 600, fontSize: 15, lineHeight: 1.3, margin: '2px 0 0' }}>{q.text}</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 10 }}>
+              {q.options.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => select(q.id, opt.value)}
+                  style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left' }}
+                >
+                  <Checkbox selected={answers[q.id] === opt.value} />
+                  <span style={{ color: 'var(--gray)', fontSize: 14, fontWeight: 500, lineHeight: 1.3 }}>{opt.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
       <div className="wz-actions">
         <button type="button" className="wz-btn wz-btn--teal" onClick={submit} disabled={!complete} style={{ opacity: complete ? 1 : 0.5 }}>
           Descobrir meu perfil

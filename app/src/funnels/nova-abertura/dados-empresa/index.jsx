@@ -33,7 +33,7 @@ const NEXT = '#/abrir-empresa/confirmacao'
 const FIELDS = [
   { id: 'nomeFantasia', label: 'Nome Fantasia', placeholder: 'Como sua empresa será conhecida', labelTop: 710, inputTop: 743 },
   { id: 'atividade', label: 'Atividade', placeholder: 'Atividade principal da empresa', labelTop: 847, inputTop: 878 },
-  { id: 'socios', label: 'Sócios', as: 'textarea', placeholder: 'Nome e CPF de cada sócio', labelTop: 983, inputTop: 1013 },
+  { id: 'socios', label: 'Sócios', as: 'textarea', placeholder: 'Nome e CPF de cada sócio', labelTop: 983, inputTop: 1013, align: 'center' },
 ]
 
 function Desktop() {
@@ -61,7 +61,7 @@ function Desktop() {
 
       <form onSubmit={onSubmit}>
         {FIELDS.map((f) => (
-          <Field key={f.id} id={f.id} label={f.label} as={f.as} labelLeft={169} left={169} labelTop={f.labelTop} inputTop={f.inputTop} placeholder={f.placeholder} defaultValue={data[f.id]} />
+          <Field key={f.id} id={f.id} label={f.label} as={f.as} align={f.align} labelLeft={169} left={169} labelTop={f.labelTop} inputTop={f.inputTop} placeholder={f.placeholder} defaultValue={data[f.id]} />
         ))}
         <a className="abs box-btn box-btn--outline" href={BACK} style={{ left: 169, top: 1170, width: 137, height: 49, background: 'var(--white)', border: '1px solid var(--teal)', borderRadius: 5, color: 'var(--gray)', fontWeight: 600, fontSize: 20, letterSpacing: '-0.6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           Voltar
@@ -90,7 +90,7 @@ function Mobile() {
       <MSub>Preencha as informações abaixo para concluirmos a abertura da sua empresa.</MSub>
       <MForm onSubmit={onSubmit}>
         {FIELDS.map((f) => (
-          <MField key={f.id} id={f.id} label={f.label} as={f.as} placeholder={f.placeholder} defaultValue={data[f.id]} />
+          <MField key={f.id} id={f.id} label={f.label} as={f.as} align={f.align} placeholder={f.placeholder} defaultValue={data[f.id]} />
         ))}
         <MPrimaryButton step="3/4">Avançar</MPrimaryButton>
       </MForm>

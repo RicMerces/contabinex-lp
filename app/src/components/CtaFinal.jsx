@@ -22,6 +22,7 @@ export default function CtaFinal() {
 
       {/* Chamada */}
       <Reveal
+        id="sec-contato"
         as="h2"
         className="abs"
         delay={0}

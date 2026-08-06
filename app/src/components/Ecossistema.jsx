@@ -50,7 +50,7 @@ export default function Ecossistema() {
   return (
     <>
       {/* Linha divisória superior */}
-      <Reveal className="abs" delay={0} style={{ left: 800, top: 1018, width: 320, height: 3, background: 'var(--teal)' }} />
+      <Reveal id="sec-solucoes" className="abs" delay={0} style={{ left: 800, top: 1018, width: 320, height: 3, background: 'var(--teal)' }} />
 
       {/* Título da seção */}
       <Reveal

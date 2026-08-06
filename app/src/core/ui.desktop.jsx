@@ -79,8 +79,10 @@ export function Field({
   onChange,
   placeholder,
   autoComplete,
+  align = 'left',
   children,
 }) {
+  const centered = align === 'center'
   const inputStyle = {
     left,
     top: inputTop,
@@ -92,10 +94,25 @@ export function Field({
     fontSize: 22,
     color: 'var(--navy)',
     background: 'var(--white)',
+    textAlign: centered ? 'center' : 'left',
   }
   return (
     <>
-      <label htmlFor={id} className="abs" style={{ left: labelLeft, top: labelTop, color: 'var(--gray)', fontWeight: 600, fontSize: 20, letterSpacing: '-0.6px', whiteSpace: 'nowrap' }}>
+      <label
+        htmlFor={id}
+        className="abs"
+        style={{
+          left: centered ? left : labelLeft,
+          top: labelTop,
+          width: centered ? width : 'auto',
+          color: 'var(--gray)',
+          fontWeight: 600,
+          fontSize: 20,
+          letterSpacing: '-0.6px',
+          whiteSpace: 'nowrap',
+          textAlign: centered ? 'center' : 'left',
+        }}
+      >
         {label}
       </label>
       {as === 'select' ? (

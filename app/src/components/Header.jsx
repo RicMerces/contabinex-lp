@@ -6,6 +6,16 @@ function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
+// Navegação in-page: rola suavemente até a âncora da section, SEM mexer no
+// hash (mudar o hash dispararia o roteador de funil + o reset de scroll do App).
+// scrollIntoView já considera o palco escalado (transform: scale).
+function goToSection(id) {
+  return (e) => {
+    e.preventDefault()
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
+
 export default function Header() {
   const handleLogoClick = (e) => {
     e.preventDefault()
@@ -41,9 +51,9 @@ export default function Header() {
           gap: NAV_GAP,
         }}
       >
-        <a href="#">Solicitar Proposta</a>
-        <a href="#solucoes">Nossas Soluções</a>
-        <a href="#planos">Planos</a>
+        <a href="#sec-contato" onClick={goToSection('sec-contato')}>Solicitar Proposta</a>
+        <a href="#sec-solucoes" onClick={goToSection('sec-solucoes')}>Nossas Soluções</a>
+        <a href="#sec-planos" onClick={goToSection('sec-planos')}>Planos</a>
       </nav>
 
       {/* Botão PESQUISAR */}

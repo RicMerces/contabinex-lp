@@ -14,24 +14,24 @@ export const VARIANTS = {
   mei: {
     plano: 'mei',
     label: 'MEI',
-    labelSize: 40,
-    desc: ['Ideal para quem está começando,', 'fatura até R$ 81k e não possui sócios.'],
+    labelSize: 36,
+    desc: 'Ideal para quem está começando, fatura até R$ 81k e não possui sócios.',
     cta: 'Quero abrir como MEI',
     href: '#/abrir-empresa/dados-mei',
   },
   simples: {
     plano: 'simples',
     label: 'Simples Nacional',
-    labelSize: 40,
-    desc: ['O modelo mais seguro para empresas', 'com sócios ou faturamento em crescimento.'],
+    labelSize: 34,
+    desc: 'O modelo mais seguro para empresas com sócios ou faturamento em crescimento.',
     cta: 'Quero abrir com Simples Nacional',
     href: '#/abrir-empresa/dados-empresa',
   },
   classes: {
     plano: 'classes',
     label: 'Plano de Classes',
-    labelSize: 40,
-    desc: ['A estrutura perfeita para profissionais liberais', 'regulamentados (Médicos, Advogados, etc)'],
+    labelSize: 34,
+    desc: 'A estrutura perfeita para profissionais liberais regulamentados (Médicos, Advogados, etc).',
     cta: 'Quero abrir com Plano de Classes',
     href: '#/abrir-empresa/dados-classes',
   },
@@ -56,7 +56,7 @@ function Desktop({ v }) {
       </h1>
 
       {/* Painel gradiente */}
-      <div className="abs" style={{ left: 338, top: 440, width: 1286, height: 726, overflow: 'hidden' }}>
+      <div className="abs" style={{ left: 338, top: 440, width: 1286, height: 726, overflow: 'hidden', borderRadius: 40 }}>
         <img src={fundo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       </div>
 
@@ -70,22 +70,44 @@ function Desktop({ v }) {
         <img src={selo} alt="Perfil verificado" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
       </div>
 
-      {/* Headline */}
-      <div className="abs" style={{ left: 549, top: 728, width: 398, textAlign: 'center', color: 'var(--white)', fontWeight: 700, fontSize: 48, letterSpacing: '-1.44px', lineHeight: 1.15 }}>
-        <p>Seu perfil empresarial</p>
-        <p>foi identificado!</p>
-      </div>
-
-      {/* Chip do plano */}
-      <div className="abs" style={{ left: 549, top: 875, width: 398, height: 100, borderRadius: 20, background: 'rgba(98,171,178,0.26)', boxShadow: '0px 4px 4px rgba(0,0,0,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <span style={{ color: 'var(--teal-light)', fontWeight: 700, fontSize: v.labelSize, letterSpacing: '-1.2px', whiteSpace: 'nowrap' }}>{v.label}</span>
-      </div>
-
-      {/* Descrição */}
-      <div className="abs" style={{ left: 549, top: 1002, width: 398, textAlign: 'center', color: 'var(--white)', fontWeight: 500, fontSize: 24, letterSpacing: '-0.72px', lineHeight: 1.25 }}>
-        {v.desc.map((line) => (
-          <p key={line}>{line}</p>
-        ))}
+      {/* Headline + chip + descrição (bloco fluido, sem quebras órfãs) */}
+      <div
+        className="abs"
+        style={{
+          left: 500,
+          top: 720,
+          width: 500,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          textAlign: 'center',
+          gap: 18,
+        }}
+      >
+        <h2 style={{ margin: 0, color: 'var(--white)', fontWeight: 700, fontSize: 40, letterSpacing: '-1.2px', lineHeight: 1.15 }}>
+          Seu perfil empresarial
+          <br />
+          foi identificado!
+        </h2>
+        <div
+          style={{
+            width: '100%',
+            maxWidth: 420,
+            minHeight: 72,
+            borderRadius: 20,
+            background: 'rgba(98,171,178,0.26)',
+            boxShadow: '0px 4px 4px rgba(0,0,0,0.25)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '14px 20px',
+          }}
+        >
+          <span style={{ color: 'var(--teal-light)', fontWeight: 700, fontSize: v.labelSize, letterSpacing: '-1px', whiteSpace: 'nowrap' }}>{v.label}</span>
+        </div>
+        <p style={{ margin: 0, maxWidth: 440, color: 'var(--white)', fontWeight: 500, fontSize: 22, letterSpacing: '-0.4px', lineHeight: 1.35 }}>
+          {v.desc}
+        </p>
       </div>
 
       {/* CTA — data injection para o funil A */}
@@ -115,8 +137,9 @@ function Mobile({ v }) {
           width: '100%',
           maxWidth: 520,
           margin: '10px auto 0',
-          borderRadius: 20,
+          borderRadius: 28,
           padding: '28px 20px 32px',
+          overflow: 'hidden',
           background: 'linear-gradient(135deg, var(--teal) 0%, var(--navy) 65%)',
           display: 'flex',
           flexDirection: 'column',
@@ -132,7 +155,7 @@ function Mobile({ v }) {
         <div style={{ width: '100%', maxWidth: 320, marginTop: 18, borderRadius: 16, background: 'rgba(98,171,178,0.26)', boxShadow: '0px 4px 4px rgba(0,0,0,0.25)', padding: '16px 12px' }}>
           <span style={{ color: 'var(--teal-light)', fontWeight: 700, fontSize: 28, letterSpacing: '-0.8px' }}>{v.label}</span>
         </div>
-        <p style={{ color: 'var(--white)', fontWeight: 500, fontSize: 16, lineHeight: 1.4, marginTop: 16 }}>{v.desc.join(' ')}</p>
+        <p style={{ color: 'var(--white)', fontWeight: 500, fontSize: 16, lineHeight: 1.4, marginTop: 16, maxWidth: 340 }}>{v.desc}</p>
       </div>
       <div className="wz-actions">
         <a className="wz-btn wz-btn--teal" href={v.href} onClick={onCta}>{v.cta}</a>

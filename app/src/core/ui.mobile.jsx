@@ -38,9 +38,10 @@ export function MSub({ children }) {
 }
 
 /** Campo móvel: label + input/select/textarea. */
-export function MField({ id, label, as = 'input', type = 'text', value, defaultValue, onChange, placeholder, autoComplete, children }) {
+export function MField({ id, label, as = 'input', type = 'text', value, defaultValue, onChange, placeholder, autoComplete, align = 'left', children }) {
+  const centered = align === 'center'
   return (
-    <div className="wz-field">
+    <div className={`wz-field${centered ? ' wz-field--center' : ''}`}>
       <label htmlFor={id}>{label}</label>
       {as === 'select' ? (
         <select id={id} name={id} value={value} defaultValue={defaultValue} onChange={onChange}>
