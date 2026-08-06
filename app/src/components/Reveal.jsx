@@ -21,15 +21,16 @@ const VARIANT_CLASS = {
 // --- Rede de segurança compartilhada ---------------------------------------
 // O IntersectionObserver pode NÃO disparar em "pulos" de rolagem (clique em
 // âncora, tecla End, arrastar a barra), o que deixaria seções puladas presas
-// em opacity:0 — invisíveis para sempre. Este scan (throttled por rAF) garante
-// que qualquer elemento "once" já visível OU já rolado por cima da viewport
-// receba is-in. Elementos que entram normalmente continuam animando pelo IO.
+// em opacity:0 — invisíveis para sempre. Este scan garante que qualquer
+// elemento "once" já visível OU já rolado por cima da viewport receba is-in.
+// É síncrono no scroll (não depende de rAF, que pausa em aba em segundo plano)
+// e barato: só relê a posição dos elementos ainda pendentes. Elementos que
+// entram normalmente continuam animando pelo IO.
 const guard = new Set()
 let listening = false
-let scheduled = false
 
 function scan() {
-  scheduled = false
+  if (!guard.size) return
   const h = window.innerHeight
   guard.forEach((el) => {
     const r = el.getBoundingClientRect()
@@ -39,16 +40,11 @@ function scan() {
     }
   })
 }
-function onScroll() {
-  if (scheduled) return
-  scheduled = true
-  requestAnimationFrame(scan)
-}
 function ensureListening() {
   if (listening) return
   listening = true
-  window.addEventListener('scroll', onScroll, { passive: true })
-  window.addEventListener('resize', onScroll, { passive: true })
+  window.addEventListener('scroll', scan, { passive: true })
+  window.addEventListener('resize', scan, { passive: true })
 }
 // ---------------------------------------------------------------------------
 
@@ -99,7 +95,7 @@ export default function Reveal({
     if (once) {
       guard.add(el)
       ensureListening()
-      onScroll() // checagem inicial (elementos já visíveis/pulados no load)
+      scan() // checagem inicial (elementos já visíveis/pulados no load)
     }
 
     return () => {

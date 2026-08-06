@@ -6,8 +6,6 @@ const PLANS = [
   {
     cardLeft: 270,
     cardWidth: 426,
-    headerLeft: 280,
-    textLeft: 328,
     title: 'Plano MEI',
     subtitle: 'Ideal para autônomos e microempreendedores.',
     benefits: [
@@ -16,15 +14,11 @@ const PLANS = [
       '3 notas fiscais gratuitas por competência',
       'Suporte e orientação por Inteligência Artificial',
     ],
-    ctaLeft: 328,
-    ctaWidth: 310,
     ctaText: 'Ativar Plano MEI',
   },
   {
     cardLeft: 747,
     cardWidth: 427,
-    headerLeft: 757,
-    textLeft: 812,
     title: 'Plano Simples Nacional',
     subtitle: 'Ideal para empresas em crescimento. (ME e EPP)',
     benefits: [
@@ -33,15 +27,11 @@ const PLANS = [
       '3 notas fiscais gratuitas por competência',
       'Atendimento digital e suporte por IA integrada',
     ],
-    ctaLeft: 792,
-    ctaWidth: 341,
     ctaText: 'Selecionar Simples Nacional',
   },
   {
     cardLeft: 1226,
     cardWidth: 426,
-    headerLeft: 1235,
-    textLeft: 1293,
     title: 'Plano Classes Profissionais',
     subtitle: 'Ideal para médicos, advogados e engenheiros.',
     benefits: [
@@ -50,8 +40,6 @@ const PLANS = [
       'Habilitação para inclusão de módulos operacionais específicos da profissão',
       'Atendimento digital especializado',
     ],
-    ctaLeft: 1274,
-    ctaWidth: 327,
     ctaText: 'Consultar Minha Categoria',
   },
 ]
@@ -59,8 +47,8 @@ const PLANS = [
 const CARD_TOP = 2104
 const CARD_HEIGHT = 609
 const HEADER_TOP = 2154
-const HEADER_HEIGHT = 109
-const TITLE_TOP = 2172
+const HEADER_INSET = 10
+const CONTENT_X = 58
 const BODY_TOP = 2307
 const CTA_TOP = 2618
 
@@ -120,25 +108,42 @@ export default function Planos() {
             <div
               className="box-plan__header abs"
               style={{
-                left: p.headerLeft - p.cardLeft,
+                left: HEADER_INSET,
                 top: HEADER_TOP - CARD_TOP,
-                width: 407,
-                height: HEADER_HEIGHT,
+                width: p.cardWidth - HEADER_INSET * 2,
+                boxSizing: 'border-box',
+                padding: '16px 20px',
                 background: 'var(--navy)',
                 borderTopLeftRadius: 14,
                 borderTopRightRadius: 14,
               }}
-            />
-            <div className="abs" style={{ left: p.textLeft - p.cardLeft, top: TITLE_TOP - CARD_TOP, width: 364 }}>
-              <p style={{ color: 'var(--white)', fontWeight: 700, fontSize: 20, lineHeight: '25px', letterSpacing: '-0.8px' }}>
+            >
+              <p
+                style={{
+                  color: 'var(--white)',
+                  fontWeight: 700,
+                  fontSize: 20,
+                  lineHeight: '25px',
+                  letterSpacing: '-0.8px',
+                  marginBottom: 6,
+                }}
+              >
                 {p.title}
               </p>
-              <p style={{ color: 'var(--white)', fontWeight: 500, fontSize: 18, lineHeight: '25px', letterSpacing: '-0.8px' }}>
+              <p
+                style={{
+                  color: 'var(--white)',
+                  fontWeight: 500,
+                  fontSize: 18,
+                  lineHeight: '25px',
+                  letterSpacing: '-0.8px',
+                }}
+              >
                 {p.subtitle}
               </p>
             </div>
 
-            <div className="abs" style={{ left: p.textLeft - 34 - p.cardLeft, top: BODY_TOP - CARD_TOP, width: p.cardWidth - 70 }}>
+            <div className="abs" style={{ left: CONTENT_X - 34, top: BODY_TOP - CARD_TOP, width: p.cardWidth - CONTENT_X - 24 }}>
               {p.benefits.map((b, j) => (
                 <div key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 14, marginBottom: 16 }}>
                   <img src={icCheck} alt="" style={{ width: 20, height: 20, flexShrink: 0, marginTop: 3 }} />
@@ -151,9 +156,9 @@ export default function Planos() {
               className="box-cta box-cta--navy abs"
               href="#"
               style={{
-                left: p.ctaLeft - p.cardLeft,
+                left: CONTENT_X,
                 top: CTA_TOP - CARD_TOP,
-                width: p.ctaWidth,
+                width: p.cardWidth - CONTENT_X * 2,
                 height: 53,
                 background: 'var(--navy)',
                 borderRadius: 40,

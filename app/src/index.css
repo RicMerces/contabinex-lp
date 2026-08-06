@@ -200,6 +200,15 @@ button {
   color: #62abb2;
 }
 
+.header-logo {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.header-logo:hover {
+  opacity: 0.85;
+}
+
 .footer-nav a,
 .footer-link {
   color: var(--white);

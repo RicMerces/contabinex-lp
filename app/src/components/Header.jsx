@@ -2,13 +2,32 @@ import { logoContabinex, icSearch, icLogin } from '../assets/index.js'
 
 const NAV_GAP = 48
 
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
 export default function Header() {
+  const handleLogoClick = (e) => {
+    e.preventDefault()
+    if (window.scrollY === 0) {
+      window.location.href = '/'
+      return
+    }
+    scrollToTop()
+  }
+
   return (
     <>
       {/* Logo */}
-      <div className="abs" style={{ left: 60, top: 31, width: 473, height: 137 }}>
+      <a
+        href="/"
+        className="abs header-logo"
+        aria-label="Voltar ao início"
+        onClick={handleLogoClick}
+        style={{ left: 60, top: 31, width: 473, height: 137, display: 'block' }}
+      >
         <img src={logoContabinex} alt="CONTABINEX" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-      </div>
+      </a>
 
       {/* Navegação — gap uniforme entre os itens */}
       <nav
