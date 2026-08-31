@@ -29,7 +29,7 @@ const PLANS = [
       'Atendimento digital e suporte por IA integrada',
     ],
     ctaText: 'Selecionar Simples Nacional',
-    ctaHref: '#/abrir-empresa', // Funil A — Nova Abertura
+    ctaHref: '#/abrir-empresa/simples', // Funil A — plano já escolhido (pula a qualificação)
   },
   {
     cardLeft: 1226,

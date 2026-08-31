@@ -41,7 +41,7 @@ function useResultCta(v) {
   const { patch } = useFunnel()
   return (e) => {
     e.preventDefault()
-    patch({ planoSugerido: v.plano })
+    patch({ planoSugerido: v.plano, origemPlano: 'quiz' })
     navigate(v.href)
   }
 }

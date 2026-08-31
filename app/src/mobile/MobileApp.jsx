@@ -100,7 +100,7 @@ const PLANS = [
       'Atendimento digital e suporte por IA integrada',
     ],
     ctaText: 'Selecionar Simples Nacional',
-    ctaHref: '#/abrir-empresa',
+    ctaHref: '#/abrir-empresa/simples',
   },
   {
     title: 'Plano Classes Profissionais',

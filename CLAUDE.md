@@ -16,9 +16,11 @@ Código do app em `app/src/`.
 2. **Figma manda no layout** (coordenadas, cores, textos), via `get_design_context`
    (skill `figma-design-to-code`).
 3. **Divergência Figma × `fluxo.md` → o `fluxo.md` vence no roteamento.**
-   Exemplo já decidido: o Figma tem capturas de lead "02-B/02-C" para os Funis B e C,
-   mas o `fluxo.md` faz o **Funil B** entrar direto na **Validação CNPJ (Tela 07)** e o
-   **Funil C** no **Assistente (Tela 09)**. Seguimos o `fluxo.md`.
+   Quando o dono manda um roteiro de requisitos novo, ele vira a fonte: atualize o
+   `fluxo.md` na mesma leva e marque o que mudou.
+   Estado atual (revisão de 31/08/2026): o **Funil B** entra pela **captura de lead
+   (Tela 02-B, `#/trocar-contador`)** e só depois vai à **Validação CNPJ (Tela 07,
+   `#/trocar-contador/validacao`)**; o **Funil C** entra no **Assistente (Tela 09)**.
 
 Os 3 funis:
 
@@ -45,8 +47,13 @@ app/src/
     routing.js                # useHashRoute, navigate, normalizeHash
     useIsMobile.js            # breakpoint 768
   funnels/<funil>/<tela>/index.jsx   # UMA tela por pasta
+  funnels/<funil>/shared/*           # hooks/blocos usados por VÁRIAS telas do funil
   funnels/<funil>/routes.js          # rotas do funil (array)
   routes.js                          # agrega os funis (NÃO editar ao add tela)
+  data/cnae.js, data/conselhos.js    # bases locais dos auto-completes
+  services/viacep.js                 # consulta de CEP (API pública)
+  services/receita.js                # Receita Federal — STUB, sem backend ainda
+  utils/br.js                        # máscaras e validações (CPF, CNPJ, CEP, celular)
   hooks/useStageScale.js
 ```
 
@@ -102,6 +109,10 @@ export default function MinhaTela() {
 - Envolva em `<DesktopStage designW={1920} designH={<altura do frame>}>`.
 - Posicione com a classe `.abs` e **coordenadas exatas do Figma** (`left/top/width/height` em px do frame de 1920). O palco é escalado para a largura da janela — não use `%`, `vw` nem media queries no desktop.
 - Prefira as **primitivas** (`Logo`, `Watermark`, `Title`, `Divider`, `SectionHeading`, `SectionSub`, `Field`, `PrimaryButton`, `AssistantBar`). As props de posição (`left`, `top`, …) sobrescrevem os defaults.
+- **Formulário longo ou com conteúdo dinâmico** (sócios, listas): use `FormColumn` — um único nó
+  absoluto no palco, com o conteúdo fluindo dentro (`FlowField`, `FlowRow`, `FlowRadio`,
+  `FlowAutocomplete`, `FlowSection`, `FlowActions`, `FlowSteps`). Nesse caso o `designH` é
+  calculado a partir do estado (ex.: `BASE_H + socios.length * 440`), nunca fixo.
 - **Cores só via CSS vars**: `var(--navy)` `#33376f`, `var(--teal)` `#62abb2`, `var(--teal-light)` `#dce8ea`, `var(--gray)` `#606062`, `var(--white)`. Borda de input = `FIELD_BORDER` (exportado). Não hardcode hex fora disso.
 - Fonte Montserrat é herdada — não defina `font-family`.
 
@@ -167,7 +178,8 @@ export default function MinhaTela() {
 - ❌ **Não edite `app/src/routes.js`** ao adicionar tela — mexa só no `routes.js` do funil.
 - ❌ **Não mexa** no `MobileApp` (landing mobile) nem na lógica de scaling ao criar telas de funil.
 - ❌ **Não deixe `whiteSpace: 'nowrap'`** estourar o container — passe `width` quando o texto quebra linha.
-- ⚠️ **Variantes órfãs:** `contador` e `empresa` da `captura-lead` **não são mais usadas** (Funis B e C seguem o `fluxo.md`). Não as referencie; remova quando confirmado com o dono.
+- ⚠️ **Fora do fluxo principal:** `upload-contrato` e `erro-upload` (Funil B) saíram do caminho feliz na revisão de 31/08/2026 — os documentos passam a ser pedidos dentro da plataforma. As rotas seguem registradas; remova só quando confirmado com o dono.
+- ⚠️ **`services/receita.js` é stub.** Não trate as respostas como reais nem escreva regra de negócio em cima delas sem marcar o TODO.
 
 ---
 
