@@ -14,6 +14,7 @@ const PLANS = [
       '3 notas fiscais gratuitas por competência',
       'Suporte e orientação por Inteligência Artificial',
     ],
+    price: '79,90',
     ctaText: 'Ativar Plano MEI',
     ctaHref: '#/abrir-empresa', // Funil A — Nova Abertura
   },
@@ -28,6 +29,7 @@ const PLANS = [
       '3 notas fiscais gratuitas por competência',
       'Atendimento digital e suporte por IA integrada',
     ],
+    price: '179,90',
     ctaText: 'Selecionar Simples Nacional',
     ctaHref: '#/abrir-empresa/simples', // Funil A — plano já escolhido (pula a qualificação)
   },
@@ -42,18 +44,21 @@ const PLANS = [
       'Habilitação para inclusão de módulos operacionais específicos da profissão',
       'Atendimento digital especializado',
     ],
+    price: '349,90',
     ctaText: 'Consultar Minha Categoria',
     ctaHref: '#/descobrir-plano', // Funil C — Triagem com IA
   },
 ]
 
 const CARD_TOP = 2104
-const CARD_HEIGHT = 609
+const CARD_HEIGHT = 679
 /* Encosta na borda do card (3px = espessura da borda) — igual ao mobile */
 const HEADER_INSET = 3
 const CONTENT_X = 58
-const BODY_TOP = 2307
-const CTA_TOP = 2618
+const PRICE_X = 39
+const PRICE_TOP = 2280
+const BODY_TOP = 2377
+const CTA_TOP = 2687
 
 export default function Planos() {
   return (
@@ -148,6 +153,15 @@ export default function Planos() {
                 }}
               >
                 {p.subtitle}
+              </p>
+            </div>
+
+            {/* "a partir de" + valor mensal */}
+            <div className="abs" style={{ left: PRICE_X, top: PRICE_TOP - CARD_TOP }}>
+              <p style={{ color: 'var(--gray)', fontWeight: 500, fontSize: 12, lineHeight: '15px' }}>a partir de</p>
+              <p style={{ lineHeight: '40px', whiteSpace: 'nowrap' }}>
+                <span style={{ color: 'var(--teal-strong)', fontWeight: 700, fontSize: 32 }}>R$ {p.price}</span>
+                <span style={{ color: 'var(--gray)', fontWeight: 500, fontSize: 16 }}>/mês</span>
               </p>
             </div>
 

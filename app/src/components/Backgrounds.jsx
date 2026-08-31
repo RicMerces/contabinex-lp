@@ -4,12 +4,14 @@ export default function Backgrounds() {
     <>
       {/* Faixa cinza — seção Ecossistema */}
       <div className="abs" style={{ left: 0, top: 1021, width: 1920, height: 899, background: 'var(--bg-gray)' }} />
-      {/* Faixa cinza — seção Expansão Premium (encosta direto no CTA, sem vão branco) */}
-      <div className="abs" style={{ left: 0, top: 2794, width: 1920, height: 1055, background: 'var(--bg-gray)' }} />
+      {/* Faixa cinza — seção Expansão Premium */}
+      <div className="abs" style={{ left: 0, top: 2842, width: 1920, height: 957, background: 'var(--bg-gray)' }} />
+      {/* Faixa cinza — seção Blog */}
+      <div className="abs" style={{ left: 0, top: 3849, width: 1920, height: 622, background: 'var(--bg-gray)' }} />
       {/* Faixa verde-água — CTA final */}
-      <div className="abs" style={{ left: 0, top: 3849, width: 1920, height: 622, background: 'var(--teal)' }} />
-      {/* Faixa azul — rodapé */}
-      <div className="abs" style={{ left: 0, top: 4471, width: 1920, height: 984, background: 'var(--navy)' }} />
+      <div className="abs" style={{ left: 0, top: 4471, width: 1920, height: 622, background: 'var(--teal)' }} />
+      {/* Faixa azul — rodapé (vai até o fim do frame) */}
+      <div className="abs" style={{ left: 0, top: 5093, width: 1920, height: 1054, background: 'var(--navy)' }} />
     </>
   )
 }

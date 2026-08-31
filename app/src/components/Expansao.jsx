@@ -4,25 +4,25 @@ import Reveal from './Reveal.jsx'
 // Seção "Expansão Premium" — imagem + 4 pílulas de funcionalidades adicionais
 const FEATURES = [
   {
-    top: 3124,
+    top: 3172,
     icon: premiumFolha,
     title: 'Folha de Pagamento',
     body: 'Gestão simplificada e recorrente por colaborador registrado ou sócio com pró-labore.',
   },
   {
-    top: 3265,
+    top: 3313,
     icon: premiumConsultoria,
     title: 'Consultoria Especializada',
     body: 'Agendamento avulso de reuniões estratégicas de 40 minutos via Google Meet diretamente pelo painel.',
   },
   {
-    top: 3405,
+    top: 3453,
     icon: premiumModulos,
     title: 'Módulos por Nicho',
     body: 'Ativação opcional de ferramentas dedicadas (ex: Gestão processual para Advogados ou Prontuário para Médicos).',
   },
   {
-    top: 3545,
+    top: 3593,
     icon: premiumCertificado,
     title: 'Certificado Digital',
     body: 'Emissão e renovação individual integrada e desimpedida para PF ou PJ.',
@@ -37,7 +37,7 @@ export default function Expansao() {
   return (
     <>
       {/* Divisória superior */}
-      <Reveal className="abs" delay={0} style={{ left: 800, top: 2791, width: 320, height: 3, background: 'var(--teal)' }} />
+      <Reveal className="abs" delay={0} style={{ left: 800, top: 2839, width: 320, height: 3, background: 'var(--teal)' }} />
 
       {/* Título da seção */}
       <Reveal
@@ -47,7 +47,7 @@ export default function Expansao() {
         delay={0}
         style={{
           left: '50%',
-          top: 2869,
+          top: 2917,
           color: 'var(--teal)',
           fontWeight: 700,
           fontSize: 32,
@@ -66,7 +66,7 @@ export default function Expansao() {
         delay={150}
         style={{
           left: '50%',
-          top: 2936,
+          top: 2984,
           color: 'var(--navy)',
           fontWeight: 700,
           fontSize: 46,
@@ -85,7 +85,7 @@ export default function Expansao() {
         delay={280}
         style={{
           left: '50%',
-          top: 2978,
+          top: 3026,
           width: 740,
           color: '#000',
           fontWeight: 400,
@@ -103,7 +103,7 @@ export default function Expansao() {
         className="abs"
         variant="fromLeft"
         delay={0}
-        style={{ left: 270, top: 3108, width: 582, height: 554, '--anim-dur': 'var(--anim-dur-slide)', '--anim-slide': '160px' }}
+        style={{ left: 270, top: 3156, width: 582, height: 554, '--anim-dur': 'var(--anim-dur-slide)', '--anim-slide': '160px' }}
       >
         <img src={mulherEscritorio} alt="Profissional no escritório" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       </Reveal>

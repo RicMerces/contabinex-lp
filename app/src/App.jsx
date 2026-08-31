@@ -5,6 +5,7 @@ import Hero from './components/Hero.jsx'
 import Ecossistema from './components/Ecossistema.jsx'
 import Planos from './components/Planos.jsx'
 import Expansao from './components/Expansao.jsx'
+import Blog from './components/Blog.jsx'
 import CtaFinal from './components/CtaFinal.jsx'
 import Footer from './components/Footer.jsx'
 import MobileApp from './mobile/MobileApp.jsx'
@@ -13,7 +14,7 @@ import { useIsMobile, useHashRoute, FunnelStateProvider, normalizeHash } from '.
 import { matchRoute } from './routes.js'
 
 const DESIGN_W = 1920
-const DESIGN_H = 5455
+const DESIGN_H = 6147
 
 function Landing() {
   const isMobile = useIsMobile()
@@ -30,6 +31,7 @@ function Landing() {
         <Ecossistema />
         <Planos />
         <Expansao />
+        <Blog />
         <CtaFinal />
         <Footer />
       </div>
