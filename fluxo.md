@@ -26,12 +26,12 @@ plano, **sem** passar pela qualificação nem pelos alertas 04A/04B:
 
 | CTA da landing | Rota | Destino |
 |---|---|---|
-| Selecionar Simples Nacional | `#/abrir-empresa/simples` | Tela 02 → Tela 06 |
-| (reservado) Classes Profissionais | `#/abrir-empresa/classes` | Tela 02 → Tela 06/1 |
+| Selecionar Simples Nacional | `#/abrir-empresa/simples` | Tela 02 `1/4` → Tela 06 |
+| Consultar Minha Categoria (card de Classes) | `#/abrir-empresa/classes` | Tela 02 `1/3` → Tela 06/1 |
 
-> "Consultar Minha Categoria" (card de Classes) continua abrindo o **Funil C**, coerente
-> com o rótulo do botão. A rota `#/abrir-empresa/classes` já existe para quando houver um
-> CTA de seleção direta desse plano.
+> 🔄 **Classes Profissionais tem 3 etapas.** Entrando pelo card da landing, a jornada é
+> Tela 02 (`1/3`) → Tela 06/1 (`2/3`) → Tela 11. Quem chega pelo alerta 04B (vindo da
+> qualificação) continua no fluxo de 4 etapas e a Tela 06/1 mostra `3/4`.
 
 ### Tipos de nó (legenda do mapa)
 
@@ -159,8 +159,14 @@ Origens: Tela 04A · modal de CPF da Tela 05 · escolha direta na landing.
 - **Seção C — Informações operacionais:** pró-labore (1 salário mínimo / acima / sem retirada) e
   previsão de contratação CLT (não contratar / 1 a 3 / mais de 3).
 
-### 🔄 Tela 06/1 — Dados Classes Profissionais `3/4`
-Origens: Tela 04B · resultado do quiz (Tela 10/1) · escolha direta na landing.
+### 🔄 Tela 06/1 — Dados Classes Profissionais `2/3` (ou `3/4`)
+Origens: escolha direta na landing (`2/3`, voltar → Tela 02) · Tela 04B · resultado do
+quiz (Tela 10/1) — nesses dois últimos casos o passo é `3/4` e o voltar leva à Tela 03.
+
+⚠️ **Só advogados por enquanto.** A tela avisa que a abertura pela plataforma está
+disponível apenas para a OAB e o dropdown de conselho oferta somente essa categoria.
+Para liberar outras, basta acrescentar os ids em `CONSELHOS_DISPONIVEIS`
+(`funnels/nova-abertura/dados-classes/index.jsx`).
 
 - **Seção A — Identificação da categoria:** conselho de classe (lista fixa em `data/conselhos.js`,
   com busca) e registro profissional (opcional). O conselho vem pré-selecionado quando a atividade
@@ -288,13 +294,13 @@ A base completa do IBGE/Receita deve vir do backend quando existir o contrato.
 | 01 | Landing Page | `#/` | A / B / C | Definida |
 | 02 | Captura de Lead `1/4` | `#/abrir-empresa` | A | Definida |
 | 02 | Captura de Lead — Simples direto | `#/abrir-empresa/simples` | A | 🔄 Nova |
-| 02 | Captura de Lead — Classes direto | `#/abrir-empresa/classes` | A | 🔄 Nova (sem CTA na landing ainda) |
+| 02 | Captura de Lead — Classes direto `1/3` | `#/abrir-empresa/classes` | A | 🔄 Nova |
 | 03 | Qualificação `2/4` | `#/abrir-empresa/qualificacao` | A | 🔄 Enquadramento automático |
 | 04A | Alerta: MEI Inviável | `#/abrir-empresa/alerta-simples` | A | Definida |
 | 04B | Alerta: Atividade Restrita | `#/abrir-empresa/alerta-classes` | A | Definida |
 | 05 | Dados MEI `3/4` | `#/abrir-empresa/dados-mei` | A | 🔄 Formulário completo + modal de CPF |
 | 06 | Dados Empresa / Simples `3/4` | `#/abrir-empresa/dados-empresa` | A | 🔄 Três seções |
-| 06/1 | Dados Classes Profissionais `3/4` | `#/abrir-empresa/dados-classes` | A | 🔄 Três seções |
+| 06/1 | Dados Classes Profissionais `2/3` \| `3/4` | `#/abrir-empresa/dados-classes` | A | 🔄 Três seções · só OAB |
 | 08 | Loading — Receita Federal | `#/abrir-empresa/processando` | A | 🔄 Nova |
 | 08E | Erro na consulta | `#/abrir-empresa/erro` | A | 🔄 Nova |
 | 11 | Confirmação | `#/abrir-empresa/confirmacao` | A | 🔄 Copy nova |
@@ -328,3 +334,5 @@ A base completa do IBGE/Receita deve vir do backend quando existir o contrato.
 6. **Persistência entre sessões.** O estado do funil vive em memória (`FunnelState`); se o usuário
    recarregar a página, perde o preenchimento.
 7. **Remoção das telas de upload** do Funil B — aguardando confirmação do dono.
+8. **Liberação das demais categorias** do plano Classes Profissionais: hoje só a OAB é
+   ofertada. Cada nova categoria precisa de aval do time antes de entrar na lista.

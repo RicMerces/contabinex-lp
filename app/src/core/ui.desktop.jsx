@@ -238,7 +238,7 @@ export function FlowError({ children }) {
 /** Campo em fluxo: label + input (ou select/textarea). */
 export function FlowField({ id, label, hint, error, as = 'input', type = 'text', flex, children, ...rest }) {
   const Cmp = as === 'select' ? 'select' : as === 'textarea' ? 'textarea' : 'input'
-  const style = { ...INPUT_STYLE, ...(as === 'textarea' ? { height: 120, padding: '18px 24px', resize: 'vertical' } : null), ...(error ? { borderColor: '#c0392b' } : null) }
+  const style = { ...INPUT_STYLE, ...(as === 'textarea' ? { height: 120, padding: '18px 24px', resize: 'vertical' } : null), ...(error ? { border: '1px solid #c0392b' } : null) }
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flex }}>
       {label && <label htmlFor={id} style={LABEL_STYLE}>{label}</label>}
@@ -299,7 +299,7 @@ export function FlowAutocomplete({ id, label, placeholder, hint, error, value, o
           onChange={(e) => { onChange(e.target.value); setOpen(true) }}
           onFocus={() => setOpen(true)}
           onBlur={() => setTimeout(() => setOpen(false), 150)}
-          style={{ ...INPUT_STYLE, ...(error ? { borderColor: '#c0392b' } : null) }}
+          style={{ ...INPUT_STYLE, ...(error ? { border: '1px solid #c0392b' } : null) }}
         />
         {open && items.length > 0 && (
           <ul style={{ position: 'absolute', top: '100%', left: 0, right: 0, marginTop: 4, zIndex: 20, listStyle: 'none', background: 'var(--white)', border: `1px solid ${FIELD_BORDER}`, borderRadius: 10, maxHeight: 320, overflowY: 'auto', boxShadow: '0 10px 24px rgba(51,55,111,0.15)' }}>

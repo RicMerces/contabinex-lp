@@ -39,7 +39,8 @@ const VARIANTS = {
   'novo-cnpj': { top: 'Vamos começar a', bottom: 'planejar o seu novo CNPJ', next: '#/abrir-empresa/qualificacao' },
   // Funil A — plano escolhido direto na landing (sem passar pelos alertas)
   simples: { top: 'Vamos começar a', bottom: 'planejar o seu Simples Nacional', next: '#/abrir-empresa/dados-empresa', plano: 'simples' },
-  classes: { top: 'Vamos começar a', bottom: 'planejar a sua Classe Profissional', next: '#/abrir-empresa/dados-classes', plano: 'classes' },
+  // Classes Profissionais entra direto pela landing e tem 3 etapas (ver fluxo.md)
+  classes: { top: 'Vamos começar a', bottom: 'planejar a sua Classe Profissional', next: '#/abrir-empresa/dados-classes', plano: 'classes', step: '1/3' },
   // Funil B — Troca de Contador (Tela 02-B)
   contador: { top: 'Vamos iniciar a', bottom: 'sua troca de contador', next: '#/trocar-contador/validacao' },
 }
@@ -95,7 +96,7 @@ function Desktop({ variant }) {
         <div className="abs" style={{ left: 165, top: 1125, width: 807 }}>
           <FlowError>{erro}</FlowError>
         </div>
-        <PrimaryButton step="1/4" />
+        <PrimaryButton step={v.step || '1/4'} />
       </form>
 
       <AssistantBar />
@@ -116,7 +117,7 @@ function Mobile({ variant }) {
           <MField key={f.id} id={f.id} label={f.label} type={f.type} placeholder={f.placeholder} autoComplete={f.autoComplete} value={values[f.id]} onChange={(e) => setters[f.id](e.target.value)} />
         ))}
         {erro && <span className="wz-error">{erro}</span>}
-        <MPrimaryButton step="1/4">Avançar</MPrimaryButton>
+        <MPrimaryButton step={v.step || '1/4'}>Avançar</MPrimaryButton>
       </MForm>
       <MAssistantBar />
     </MobileShell>

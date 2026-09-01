@@ -118,7 +118,7 @@ const PLANS = [
     ],
     price: '349,90',
     ctaText: 'Consultar Minha Categoria',
-    ctaHref: '#/descobrir-plano',
+    ctaHref: '#/abrir-empresa/classes',
   },
 ]
 

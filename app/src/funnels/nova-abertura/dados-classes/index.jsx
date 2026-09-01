@@ -18,6 +18,7 @@ import {
   FlowAutocomplete,
   FlowActions,
   FlowError,
+  FlowNote,
   MobileShell,
   MTitle,
   MDivider,
@@ -29,6 +30,7 @@ import {
   MAutocomplete,
   MPrimaryButton,
   MAssistantBar,
+  MCard,
 } from '../../../core/index.js'
 import { CONSELHOS, conselhoLabel, findConselho } from '../../../data/conselhos.js'
 import { normalizarTexto } from '../../../utils/br.js'
@@ -41,8 +43,17 @@ import { useSocios, SociosDesktop, SociosMobile } from '../shared/Socios.jsx'
 // Não há bloco de informações operacionais (pró-labore / CLT) neste plano.
 const DESIGN_W = 1920
 const BASE_H = 2600
-const BACK = '#/abrir-empresa/qualificacao'
+// Quem entra direto pela landing faz 3 etapas e volta para a captura de lead
+// (Tela 02). Quem cai aqui pelo alerta 04B continua no fluxo de 4 etapas.
+const BACK_LANDING = '#/abrir-empresa/classes'
+const BACK_QUALIFICACAO = '#/abrir-empresa/qualificacao'
 const NEXT = '#/abrir-empresa/confirmacao'
+
+// ⚠️ Enquanto só há operação para advogados, o único conselho ofertado é a OAB.
+// Para abrir outras categorias, basta acrescentar os ids aqui (data/conselhos.js).
+const CONSELHOS_DISPONIVEIS = ['oab']
+const AVISO_CATEGORIA =
+  'No momento, a abertura pela plataforma está disponível apenas para advogados (OAB). Para as demais categorias, fale com um assistente que cuidamos do seu caso.'
 
 const TITULO = 'Plano Classes Profissionais'
 const SUBTITULO =
@@ -53,14 +64,18 @@ const INSTRUCAO_ENDERECO =
   'Indique o endereço onde exercerá a profissão (consultório, escritório ou coworking) para a checagem de viabilidade urbana.'
 
 /** Busca no dropdown de conselhos (lista fixa, sem API externa). */
+const OFERTADOS = CONSELHOS.filter((c) => CONSELHOS_DISPONIVEIS.includes(c.id))
 const searchConselhos = (termo) => {
   const q = normalizarTexto(termo)
-  if (!q) return CONSELHOS
-  return CONSELHOS.filter((c) => normalizarTexto(conselhoLabel(c)).includes(q))
+  if (!q) return OFERTADOS
+  return OFERTADOS.filter((c) => normalizarTexto(conselhoLabel(c)).includes(q))
 }
 
 function useDadosClasses() {
   const { data, patch } = useFunnel()
+  const direto = data.origemPlano === 'landing'
+  const step = direto ? '2/3' : '3/4'
+  const back = direto ? BACK_LANDING : BACK_QUALIFICACAO
   // A profissão escolhida na Tela 03 já pré-seleciona o conselho (data injection).
   const conselhoInicial = findConselho(data.conselho)
   const [conselho, setConselho] = useState(conselhoInicial ? conselhoLabel(conselhoInicial) : '')
@@ -76,6 +91,7 @@ function useDadosClasses() {
   const submit = (e) => {
     e.preventDefault()
     if (!conselhoId) return setErro('Selecione o conselho de classe na lista.')
+    if (!CONSELHOS_DISPONIVEIS.includes(conselhoId)) return setErro(AVISO_CATEGORIA)
     if (!end.completo) return setErro('Preencha o endereço completo onde exercerá a profissão (CEP, endereço, cidade, estado e país).')
     const erroSocios = soc.validar()
     if (erroSocios) return setErro(erroSocios)
@@ -84,7 +100,7 @@ function useDadosClasses() {
     navigate(NEXT)
   }
 
-  return { conselho, setConselho, conselhoId, escolherConselho, registro, setRegistro, nomeFantasia, setNomeFantasia, erro, submit, end, soc }
+  return { conselho, setConselho, conselhoId, escolherConselho, registro, setRegistro, nomeFantasia, setNomeFantasia, erro, submit, end, soc, step, back }
 }
 
 function Desktop() {
@@ -103,6 +119,7 @@ function Desktop() {
 
       <form onSubmit={f.submit}>
         <FormColumn top={700} width={807}>
+          <FlowNote>⚠️ {AVISO_CATEGORIA}</FlowNote>
           <FlowAutocomplete
             id="conselho"
             label="Conselho de Classe / Profissão Regulamentada"
@@ -144,7 +161,7 @@ function Desktop() {
           </FlowSection>
 
           <FlowError>{f.erro}</FlowError>
-          <FlowActions backHref={BACK} step="3/4" />
+          <FlowActions backHref={f.back} step={f.step} />
         </FormColumn>
       </form>
 
@@ -156,13 +173,16 @@ function Desktop() {
 function Mobile() {
   const f = useDadosClasses()
   return (
-    <MobileShell back={BACK} align="left">
+    <MobileShell back={f.back} align="left">
       <MTitle>{TITULO}</MTitle>
       <MSub>{SUBTITULO}</MSub>
       <MDivider />
       <MHeading>Identificação da Categoria</MHeading>
       <MSub>O primeiro passo para construirmos uma parceria de sucesso.</MSub>
       <MForm onSubmit={f.submit}>
+        <MCard tone="light">
+          <p style={{ color: 'var(--navy)', fontSize: 14, lineHeight: 1.45 }}>⚠️ {AVISO_CATEGORIA}</p>
+        </MCard>
         <MAutocomplete id="conselho" label="Conselho de Classe / Profissão Regulamentada" placeholder="Busque pelo conselho (ex.: CRM, OAB, CREA)" value={f.conselho} onChange={f.setConselho} onSelect={f.escolherConselho} search={searchConselhos} itemLabel={conselhoLabel} />
         <MField id="registroConselho" label="Registro Profissional (opcional)" value={f.registro} onChange={(e) => f.setRegistro(e.target.value)} placeholder="Número de registro no conselho" hint="Caso ainda não tenha o registro ativo ou esteja em transição, pode deixar este campo em branco." />
       </MForm>
@@ -181,7 +201,7 @@ function Mobile() {
       </MSection>
 
       {f.erro && <span className="wz-error" style={{ marginTop: 16 }}>{f.erro}</span>}
-      <MPrimaryButton step="3/4" type="button" onClick={f.submit}>Avançar</MPrimaryButton>
+      <MPrimaryButton step={f.step} type="button" onClick={f.submit}>Avançar</MPrimaryButton>
       <MAssistantBar />
     </MobileShell>
   )

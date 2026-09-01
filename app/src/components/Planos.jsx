@@ -46,7 +46,7 @@ const PLANS = [
     ],
     price: '349,90',
     ctaText: 'Consultar Minha Categoria',
-    ctaHref: '#/descobrir-plano', // Funil C — Triagem com IA
+    ctaHref: '#/abrir-empresa/classes', // Funil A — plano já escolhido (pula a qualificação)
   },
 ]
 
