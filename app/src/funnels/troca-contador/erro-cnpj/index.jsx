@@ -1,12 +1,15 @@
 import {
   DesktopStage,
   Responsive,
+  useFunnel,
+  navigate,
   Logo,
   Watermark,
   Title,
   Divider,
-  PrimaryButton,
+  SectionSub,
   AssistantBar,
+  FormColumn,
   MobileShell,
   MTitle,
   MDivider,
@@ -14,56 +17,69 @@ import {
   MPrimaryButton,
   MAssistantBar,
 } from '../../../core/index.js'
+import alertTriangle from '../../../assets/icons/alert-triangle.svg'
 
 // Tela 08/E — Erro: CNPJ não encontrado na Receita Federal.
-// Recuperação: corrigir os dados → volta para a validação (Tela 07).
-// Frame do Figma: 1920 x ~1200.
+// Três recuperações: tentar de novo com os dados preenchidos, informar outro
+// CNPJ (limpa os campos) ou falar com um consultor.
 const DESIGN_W = 1920
-const DESIGN_H = 1200
-const RETRY = '#/trocar-contador'
+const DESIGN_H = 1300
+const TELA_07 = '#/trocar-contador/validacao'
+const ASSISTENTE = '#/descobrir-plano'
 
-function Badge({ size = 96 }) {
-  return (
-    <div style={{ width: size, height: size, borderRadius: '50%', background: 'var(--teal-light)', color: 'var(--teal)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: size * 0.55, lineHeight: 1 }}>
-      !
-    </div>
-  )
+const TITULO = 'CNPJ Não Encontrado'
+const SUBTITULO = 'Falha na validação dos dados cadastrais.'
+const BODY =
+  'Não conseguimos localizar o CNPJ informado na base de dados da Receita Federal. Verifique se os números foram digitados corretamente ou se o registro está ativo.'
+
+/** "Informar outro CNPJ" volta para a Tela 07 com os campos limpos. */
+function useAcoes() {
+  const { patch } = useFunnel()
+  const outroCnpj = () => {
+    patch({ cnpj: '', cpfSocio: '', empresa: null })
+    navigate(TELA_07)
+  }
+  return { outroCnpj }
 }
 
 function Desktop() {
+  const { outroCnpj } = useAcoes()
+  const BTN = { height: 60, padding: '0 32px', borderRadius: 10, fontWeight: 600, fontSize: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }
   return (
     <DesktopStage designW={DESIGN_W} designH={DESIGN_H}>
       <Logo />
       <Watermark />
-      <div className="abs" style={{ left: 170, top: 333 }}>
-        <Badge />
-      </div>
-      <Title left={170} top={460}>CNPJ não encontrado</Title>
-      <div className="abs" style={{ left: 170, top: 545, color: 'var(--gray)', fontWeight: 700, fontSize: 24, letterSpacing: '-0.72px', lineHeight: 'normal', whiteSpace: 'nowrap' }}>
-        Não localizamos este CNPJ na base da Receita Federal.
-        <br />
-        Confira se o CNPJ e o CPF do sócio administrador estão corretos.
-      </div>
+      <img className="abs" src={alertTriangle} alt="" style={{ left: 170, top: 333, width: 96, height: 96 }} />
+      <Title left={170} top={470} width={1100}>{TITULO}</Title>
+      <SectionSub left={170} top={548} width={1100}>{SUBTITULO}</SectionSub>
+      <Divider left={170} top={620} />
+      <SectionSub left={170} top={660} width={1100}>{BODY}</SectionSub>
 
-      <Divider left={170} top={680} />
+      <FormColumn left={170} top={800} width={1100}>
+        <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+          <a href={TELA_07} className="box-btn" style={{ ...BTN, background: 'var(--teal)', color: 'var(--white)' }}>Tentar Novamente</a>
+          <button type="button" onClick={outroCnpj} className="box-btn box-btn--outline" style={{ ...BTN, background: 'var(--white)', border: '1px solid var(--teal)', color: 'var(--teal)' }}>Informar outro CNPJ</button>
+          <a href={ASSISTENTE} className="box-cta box-cta--light" style={{ ...BTN, background: 'var(--teal-light)', color: 'var(--gray)' }}>Falar com consultor</a>
+        </div>
+      </FormColumn>
 
-      <PrimaryButton left={170} top={760} width={360} href={RETRY}>Corrigir dados</PrimaryButton>
-
-      <AssistantBar dividerTop={960} barTop={1028} />
+      <AssistantBar dividerTop={1060} barTop={1128} />
     </DesktopStage>
   )
 }
 
 function Mobile() {
+  const { outroCnpj } = useAcoes()
   return (
-    <MobileShell back="#/trocar-contador" align="center">
-      <div style={{ margin: '20px 0 24px' }}>
-        <Badge size={80} />
-      </div>
-      <MTitle>CNPJ não encontrado</MTitle>
+    <MobileShell back={TELA_07} align="center">
+      <img src={alertTriangle} alt="" style={{ width: 72, height: 72, marginTop: 16 }} />
+      <MTitle>{TITULO}</MTitle>
+      <MSub>{SUBTITULO}</MSub>
       <MDivider />
-      <MSub>Não localizamos este CNPJ na base da Receita Federal. Confira se o CNPJ e o CPF do sócio administrador estão corretos.</MSub>
-      <MPrimaryButton href={RETRY} variant="teal">Corrigir dados</MPrimaryButton>
+      <MSub>{BODY}</MSub>
+      <MPrimaryButton href={TELA_07} variant="teal">Tentar Novamente</MPrimaryButton>
+      <MPrimaryButton type="button" onClick={outroCnpj} variant="outline">Informar outro CNPJ</MPrimaryButton>
+      <MPrimaryButton href={ASSISTENTE} variant="light">Falar com consultor</MPrimaryButton>
       <MAssistantBar />
     </MobileShell>
   )

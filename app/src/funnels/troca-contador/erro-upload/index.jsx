@@ -21,7 +21,7 @@ import {
 const DESIGN_W = 1920
 const DESIGN_H = 1200
 const RETRY = '#/trocar-contador/upload'
-const OTHER_CNPJ = '#/trocar-contador'
+const OTHER_CNPJ = '#/trocar-contador/validacao'
 
 function Badge({ size = 96 }) {
   return (

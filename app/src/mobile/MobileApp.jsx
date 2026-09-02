@@ -18,6 +18,9 @@ import {
   ecoCentralDocs,
   icCheck,
   icArrow,
+  blogArtigo1,
+  blogArtigo2,
+  blogArtigo3,
   mulherEscritorio,
   premiumFolha,
   premiumConsultoria,
@@ -87,6 +90,7 @@ const PLANS = [
       '3 notas fiscais gratuitas por competência',
       'Suporte e orientação por Inteligência Artificial',
     ],
+    price: '79,90',
     ctaText: 'Ativar Plano MEI',
     ctaHref: '#/abrir-empresa',
   },
@@ -99,8 +103,9 @@ const PLANS = [
       '3 notas fiscais gratuitas por competência',
       'Atendimento digital e suporte por IA integrada',
     ],
+    price: '179,90',
     ctaText: 'Selecionar Simples Nacional',
-    ctaHref: '#/abrir-empresa',
+    ctaHref: '#/abrir-empresa/simples',
   },
   {
     title: 'Plano Classes Profissionais',
@@ -111,8 +116,31 @@ const PLANS = [
       'Habilitação para inclusão de módulos operacionais específicos da profissão',
       'Atendimento digital especializado',
     ],
+    price: '349,90',
     ctaText: 'Consultar Minha Categoria',
-    ctaHref: '#/descobrir-plano',
+    ctaHref: '#/abrir-empresa/classes',
+  },
+]
+
+// Blog — mesmas chamadas do desktop (ver components/Blog.jsx).
+const ARTIGOS = [
+  {
+    img: blogArtigo1,
+    tag: 'Contabilidade',
+    title: '5 erros contábeis que podem custar caro para sua empresa',
+    excerpt: 'Identifique os principais desvios que podem levar a multas, atrasos e perda de controle financeiro.',
+  },
+  {
+    img: blogArtigo2,
+    tag: 'Impostos',
+    title: 'Simples Nacional vs. Lucro Presumido: qual regime tributário escolher?',
+    excerpt: 'Compare alíquotas, obrigações e benefícios para tomar a melhor decisão para o seu negócio.',
+  },
+  {
+    img: blogArtigo3,
+    tag: 'Gestão Fiscal',
+    title: 'Como organizar suas obrigações fiscais e evitar multas',
+    excerpt: 'Roteiro prático para manter guias, certidões e prazos sob controle com menos burocracia.',
   },
 ]
 
@@ -377,6 +405,12 @@ function MobilePlanos() {
               <h3>{p.title}</h3>
               <p>{p.subtitle}</p>
             </div>
+            <div className="m-plan__price">
+              <span>a partir de</span>
+              <p>
+                <strong>R$ {p.price}</strong>/mês
+              </p>
+            </div>
             <div className="m-plan__body">
               {p.benefits.map((b, j) => (
                 <div key={j} className="m-plan__benefit">
@@ -503,6 +537,36 @@ function MobileFooter() {
   )
 }
 
+function MobileBlog() {
+  return (
+    <section id="blog" className="m-section m-section--gray">
+      <div className="m-section__head">
+        <Reveal as="span" className="m-eyebrow" delay={0}>BLOG CONTABINEX</Reveal>
+        <Reveal as="h2" className="m-title" delay={80}>Conteúdo que fortalece sua gestão</Reveal>
+      </div>
+
+      <DragHint />
+      <HScroll>
+        {ARTIGOS.map((a, i) => (
+          <Reveal key={a.title} className="m-artigo" delay={i * 80}>
+            <img className="m-artigo__img" src={a.img} alt="" />
+            <span className="m-artigo__tag">{a.tag}</span>
+            <h3>{a.title}</h3>
+            <p>{a.excerpt}</p>
+            {/* TODO: sem destino enquanto o blog não existir (ver components/Blog.jsx). */}
+            <span className="m-artigo__more">Ler mais →</span>
+          </Reveal>
+        ))}
+        <span className="m-hscroll__end" aria-hidden="true" />
+      </HScroll>
+
+      <div className="m-blog__actions">
+        <span className="m-btn m-btn--navy">Ver todos os artigos</span>
+      </div>
+    </section>
+  )
+}
+
 export default function MobileApp() {
   return (
     <div className="m-root">
@@ -511,6 +575,7 @@ export default function MobileApp() {
       <MobileEcossistema />
       <MobilePlanos />
       <MobileExpansao />
+      <MobileBlog />
       <MobileCtaFinal />
       <MobileFooter />
     </div>

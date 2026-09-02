@@ -21,7 +21,7 @@ const SOCIALS = [
 
 const navColStyle = (left) => ({
   left,
-  top: 4787,
+  top: 5409,
   fontWeight: 700,
   fontSize: 24,
   lineHeight: '50px',
@@ -33,7 +33,7 @@ export default function Footer() {
   return (
     <>
       {/* Logo branco */}
-      <div className="abs" style={{ left: 35, top: 4565, width: 446, height: 121 }}>
+      <div className="abs" style={{ left: 35, top: 5187, width: 446, height: 121 }}>
         <img src={logoBranco} alt="CONTABINEX" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       </div>
 
@@ -54,13 +54,13 @@ export default function Footer() {
       </nav>
 
       {/* Contato */}
-      <img src={icEmail} alt="" className="abs" style={{ left: 1301, top: 4795, width: 30, height: 30 }} />
+      <img src={icEmail} alt="" className="abs" style={{ left: 1301, top: 5417, width: 30, height: 30 }} />
       <a
         className="footer-link abs"
         href="mailto:atendimento@contabinex.com.br"
         style={{
           left: 1358,
-          top: 4787,
+          top: 5409,
           fontWeight: 700,
           fontSize: 24,
           lineHeight: '50px',
@@ -74,7 +74,7 @@ export default function Footer() {
         className="abs"
         style={{
           left: 1301,
-          top: 4862,
+          top: 5484,
           color: 'var(--white)',
           fontWeight: 700,
           fontSize: 24,
@@ -86,21 +86,21 @@ export default function Footer() {
         Siga-nos nas redes sociais:
       </p>
       {SOCIALS.map((s) => (
-        <a key={s.alt} className="footer-social abs" href="#" style={{ left: s.left, top: 4915, width: 38, height: 38 }}>
+        <a key={s.alt} className="footer-social abs" href="#" style={{ left: s.left, top: 5537, width: 38, height: 38 }}>
           <img src={s.icon} alt={s.alt} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
         </a>
       ))}
 
       {/* Assinatura inferior */}
-      <div className="abs" style={{ left: 80, top: 5339, width: 93, height: 53 }}>
+      <div className="abs" style={{ left: 80, top: 5961, width: 93, height: 53 }}>
         <img src={logoCx} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
       </div>
-      <div className="abs" style={{ left: 178, top: 5331, width: 1, height: 76, background: 'var(--teal)' }} />
+      <div className="abs" style={{ left: 178, top: 5953, width: 1, height: 76, background: 'var(--teal)' }} />
       <p
         className="abs"
         style={{
           left: 192,
-          top: 5345,
+          top: 5967,
           color: 'var(--white)',
           fontWeight: 500,
           fontSize: 14,

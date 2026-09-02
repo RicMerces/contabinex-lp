@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   DesktopStage,
   Responsive,
@@ -8,8 +9,12 @@ import {
   Title,
   Divider,
   SectionHeading,
-  Field,
+  SectionSub,
   AssistantBar,
+  FormColumn,
+  FlowField,
+  FlowNote,
+  FlowError,
   MobileShell,
   MTitle,
   MDivider,
@@ -20,71 +25,71 @@ import {
   MPrimaryButton,
   MAssistantBar,
 } from '../../../core/index.js'
+import { maskCnpj, maskCpf, isValidCnpj, isValidCpf } from '../../../utils/br.js'
 
-// Tela 07 — Validação CNPJ/CPF (etapa 1/4). Entrada do Funil B (Troca de Contador).
-// Coleta CNPJ da empresa + CPF do sócio administrador para consulta na Receita Federal.
-// Frame do Figma: 1920 x ~1650.
+// Tela 07 — Troca de Contador (etapa 2/4). Coleta o CNPJ da empresa e o CPF
+// do sócio administrador para a consulta na Receita Federal (Tela 08).
+// Vem da Tela 02-B (captura de lead do Funil B). Frame do Figma: 1920 x 1650.
 const DESIGN_W = 1920
 const DESIGN_H = 1650
+const BACK = '#/trocar-contador'
 const NEXT = '#/trocar-contador/consultando'
 
-const FIELDS = [
-  { id: 'cnpj', label: 'CNPJ da Empresa', type: 'text', placeholder: '00.000.000/0001-00', labelTop: 733, inputTop: 766 },
-  { id: 'cpfSocio', label: 'CPF do Sócio Administrador', type: 'text', placeholder: '000.000.000-00', labelTop: 870, inputTop: 903 },
-]
+const TITULO = 'Troca de Contador'
+const SUBTITULO =
+  'Para iniciarmos o processo de migração da sua escrita contábil, precisamos localizar sua empresa na Receita Federal.'
+const OBS = 'Obs.: O CPF deve ser do responsável legal cadastrado no CNPJ para validação de segurança.'
 
-function useCnpjForm() {
+function useValidacao() {
   const { data, patch } = useFunnel()
+  const [cnpj, setCnpjState] = useState(data.cnpj || '')
+  const [cpfSocio, setCpfState] = useState(data.cpfSocio || '')
+  const [erro, setErro] = useState('')
+
+  const setCnpj = (v) => setCnpjState(maskCnpj(v))
+  const setCpfSocio = (v) => setCpfState(maskCpf(v))
+
   const onSubmit = (e) => {
     e.preventDefault()
-    const fd = new FormData(e.currentTarget)
-    patch({ cnpj: fd.get('cnpj'), cpfSocio: fd.get('cpfSocio') })
+    if (!isValidCnpj(cnpj)) return setErro('CNPJ inválido. Confira os números digitados.')
+    if (!isValidCpf(cpfSocio)) return setErro('CPF inválido. Confira os números digitados.')
+    setErro('')
+    patch({ cnpj, cpfSocio })
     navigate(NEXT)
   }
-  return { data, onSubmit }
+
+  return { cnpj, setCnpj, cpfSocio, setCpfSocio, erro, onSubmit }
 }
 
 function Desktop() {
-  const { data, onSubmit } = useCnpjForm()
+  const f = useValidacao()
   return (
     <DesktopStage designW={DESIGN_W} designH={DESIGN_H}>
       <Logo />
       <Watermark />
-      <Title left={170} top={333}>Troca de Contador</Title>
-      <div
-        className="abs"
-        style={{ left: 170, top: 411, color: 'var(--gray)', fontWeight: 700, fontSize: 24, letterSpacing: '-0.72px', lineHeight: 'normal', whiteSpace: 'nowrap' }}
-      >
-        Para iniciarmos o processo de migração da sua escrita contábil,
-        <br />
-        precisamos localizar sua empresa na Receita Federal.
-      </div>
+      <Title left={170} top={333}>{TITULO}</Title>
+      <SectionSub left={170} top={411} width={1100}>{SUBTITULO}</SectionSub>
 
       <Divider left={170} top={570} />
       <SectionHeading left={170} top={595}>Informe os dados da sua empresa atual</SectionHeading>
-      <p className="abs" style={{ left: 170, top: 643, color: 'var(--gray)', fontWeight: 700, fontSize: 20, letterSpacing: '-0.6px', whiteSpace: 'nowrap' }}>
-        O primeiro passo para construirmos uma parceria de sucesso.
-      </p>
+      <SectionSub left={170} top={643} width={1100}>O primeiro passo para construirmos uma parceria de sucesso.</SectionSub>
 
-      <form onSubmit={onSubmit}>
-        {FIELDS.map((f) => (
-          <Field key={f.id} id={f.id} label={f.label} type={f.type} placeholder={f.placeholder} labelLeft={170} left={170} labelTop={f.labelTop} inputTop={f.inputTop} defaultValue={data[f.id]} />
-        ))}
-
-        <p className="abs" style={{ left: 170, top: 997, color: 'var(--teal)', fontWeight: 600, fontSize: 20, letterSpacing: '-0.6px', whiteSpace: 'nowrap' }}>
-          Obs.: O CPF deve ser do responsável legal cadastrado no CNPJ para validação de segurança.
-        </p>
-
-        <button
-          type="submit"
-          className="abs box-btn"
-          style={{ left: 170, top: 1093, width: 577, height: 75, background: 'var(--teal)', border: '1px solid var(--white)', borderRadius: 10, color: 'var(--white)', fontWeight: 700, fontSize: 20, letterSpacing: '-0.6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        >
-          [ Validar Empresa ]
-        </button>
-        <span className="abs" style={{ left: 865, top: 1093, color: 'var(--teal)', fontWeight: 600, fontSize: 40, letterSpacing: '-1.2px', lineHeight: '75px', whiteSpace: 'nowrap' }}>
-          1/4
-        </span>
+      <form onSubmit={f.onSubmit}>
+        <FormColumn left={170} top={733} width={807}>
+          <FlowField id="cnpj" label="CNPJ da Empresa" value={f.cnpj} onChange={(e) => f.setCnpj(e.target.value)} placeholder="00.000.000/0001-00" inputMode="numeric" />
+          <FlowField id="cpfSocio" label="CPF do Sócio Administrador" value={f.cpfSocio} onChange={(e) => f.setCpfSocio(e.target.value)} placeholder="000.000.000-00" inputMode="numeric" />
+          <FlowNote>{OBS}</FlowNote>
+          <FlowError>{f.erro}</FlowError>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 30, marginTop: 10 }}>
+            <a href={BACK} className="box-btn box-btn--outline" style={{ width: 137, height: 75, background: 'var(--white)', border: '1px solid var(--teal)', borderRadius: 10, color: 'var(--gray)', fontWeight: 600, fontSize: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              Voltar
+            </a>
+            <button type="submit" className="box-btn" style={{ width: 440, height: 75, background: 'var(--teal)', borderRadius: 10, color: 'var(--white)', fontWeight: 700, fontSize: 20, letterSpacing: '-0.6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              [ Validar Empresa ]
+            </button>
+            <span style={{ color: 'var(--teal)', fontWeight: 600, fontSize: 40, letterSpacing: '-1.2px', lineHeight: '75px' }}>2/4</span>
+          </div>
+        </FormColumn>
       </form>
 
       <AssistantBar dividerTop={1406} barTop={1474} />
@@ -93,20 +98,19 @@ function Desktop() {
 }
 
 function Mobile() {
-  const { data, onSubmit } = useCnpjForm()
+  const f = useValidacao()
   return (
-    <MobileShell back="#/" align="left">
-      <MTitle>Troca de Contador</MTitle>
-      <MSub>Para iniciarmos o processo de migração da sua escrita contábil, precisamos localizar sua empresa na Receita Federal.</MSub>
+    <MobileShell back={BACK} align="left">
+      <MTitle>{TITULO}</MTitle>
+      <MSub>{SUBTITULO}</MSub>
       <MDivider />
       <MHeading>Informe os dados da sua empresa atual</MHeading>
       <MSub>O primeiro passo para construirmos uma parceria de sucesso.</MSub>
-      <MForm onSubmit={onSubmit}>
-        {FIELDS.map((f) => (
-          <MField key={f.id} id={f.id} label={f.label} type={f.type} placeholder={f.placeholder} defaultValue={data[f.id]} />
-        ))}
-        <MSub>Obs.: O CPF deve ser do responsável legal cadastrado no CNPJ para validação de segurança.</MSub>
-        <MPrimaryButton step="1/4">Validar Empresa</MPrimaryButton>
+      <MForm onSubmit={f.onSubmit}>
+        <MField id="cnpj" label="CNPJ da Empresa" value={f.cnpj} onChange={(e) => f.setCnpj(e.target.value)} placeholder="00.000.000/0001-00" inputMode="numeric" />
+        <MField id="cpfSocio" label="CPF do Sócio Administrador" value={f.cpfSocio} onChange={(e) => f.setCpfSocio(e.target.value)} placeholder="000.000.000-00" inputMode="numeric" hint={OBS} />
+        {f.erro && <span className="wz-error">{f.erro}</span>}
+        <MPrimaryButton step="2/4">Validar Empresa</MPrimaryButton>
       </MForm>
       <MAssistantBar />
     </MobileShell>

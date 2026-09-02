@@ -12,25 +12,31 @@ import {
   SectionSub,
   PrimaryButton,
   AssistantBar,
-  FIELD_BORDER,
+  FlowAutocomplete,
+  FlowError,
   MobileShell,
   MTitle,
   MDivider,
   MHeading,
   MSub,
-  MField,
   MForm,
+  MRadio,
+  MAutocomplete,
   MPrimaryButton,
   MAssistantBar,
 } from '../../../core/index.js'
 import checkWhite from '../../../assets/icons/check-white.svg'
+import { searchCnae, cnaeLabel, findCnaeByLabel, isRegulamentada, permiteMei } from '../../../data/cnae.js'
 
 // Tela 03 — Qualificação (etapa 2/4). Perfil da empresa: faturamento,
-// nº de funcionários e ramo de atividade. Frame do Figma: 1920 x 1700.
+// nº de funcionários e ramo de atividade (auto-complete CNAE).
+// Aqui acontece o enquadramento automático (04A / 04B). Frame: 1920 x 1700.
 const DESIGN_W = 1920
 const DESIGN_H = 1700
 const BACK = '#/abrir-empresa'
-const NEXT = '#/abrir-empresa/dados-empresa'
+const ALERTA_SIMPLES = '#/abrir-empresa/alerta-simples'
+const ALERTA_CLASSES = '#/abrir-empresa/alerta-classes'
+const DADOS_MEI = '#/abrir-empresa/dados-mei'
 
 const FATURAMENTO = [
   { value: 'ate-81k', label: 'Até R$ 81.000,00 por ano (Média de R$ 6.750,00/mês)' },
@@ -40,6 +46,56 @@ const FUNCIONARIOS = [
   { value: 'ate-1', label: 'Nenhum ou no máximo 1 funcionário' },
   { value: '2-ou-mais', label: '2 ou mais funcionários' },
 ]
+
+/**
+ * Enquadramento automático a partir das respostas da Tela 03.
+ * A atividade regulamentada tem PRIORIDADE sobre faturamento/funcionários:
+ * mesmo dentro dos limites do MEI, conselho de classe → Classes Profissionais.
+ */
+export function enquadrar({ faturamento, funcionarios, cnae }) {
+  if (cnae && isRegulamentada(cnae)) {
+    return { plano: 'classes', next: ALERTA_CLASSES, conselho: cnae.conselho }
+  }
+  const excedeLimite = faturamento === 'acima-81k' || funcionarios === '2-ou-mais'
+  if (excedeLimite || (cnae && !permiteMei(cnae))) {
+    return { plano: 'simples', next: ALERTA_SIMPLES }
+  }
+  return { plano: 'mei', next: DADOS_MEI }
+}
+
+/** Estado + validação + decisão, compartilhados entre desktop e mobile. */
+function useQualificacao() {
+  const { data, patch } = useFunnel()
+  const [faturamento, setFaturamento] = useState(data.faturamento || '')
+  const [funcionarios, setFuncionarios] = useState(data.funcionarios || '')
+  const [ramo, setRamo] = useState(data.ramo || '')
+  const [cnae, setCnae] = useState(() => findCnaeByLabel(data.ramo) || null)
+  const [erro, setErro] = useState('')
+
+  const submit = (e) => {
+    e.preventDefault()
+    if (!faturamento || !funcionarios) return setErro('Responda às duas primeiras perguntas para continuar.')
+    const atividade = cnae || findCnaeByLabel(ramo)
+    if (!atividade) return setErro('Selecione a atividade na lista de sugestões (digite ao menos 3 letras).')
+    setErro('')
+    const { plano, next, conselho } = enquadrar({ faturamento, funcionarios, cnae: atividade })
+    patch({
+      faturamento,
+      funcionarios,
+      ramo: cnaeLabel(atividade),
+      cnae: atividade.code,
+      conselho: conselho || null,
+      planoSugerido: plano,
+      origemPlano: 'qualificacao',
+    })
+    navigate(next)
+  }
+
+  const onPick = (item) => { setCnae(item); setRamo(cnaeLabel(item)) }
+  const onType = (v) => { setRamo(v); setCnae(null) }
+
+  return { faturamento, setFaturamento, funcionarios, setFuncionarios, ramo, onType, onPick, erro, submit }
+}
 
 /** Opção tipo "radio" no layout do Figma (quadrado 22px + rótulo). */
 function Opt({ squareTop, labelTop, checked, onSelect, children }) {
@@ -64,16 +120,7 @@ function Opt({ squareTop, labelTop, checked, onSelect, children }) {
 }
 
 function Desktop() {
-  const { data, patch } = useFunnel()
-  const [faturamento, setFaturamento] = useState(data.faturamento || '')
-  const [funcionarios, setFuncionarios] = useState(data.funcionarios || '')
-
-  const onSubmit = (e) => {
-    e.preventDefault()
-    const fd = new FormData(e.currentTarget)
-    patch({ faturamento, funcionarios, ramo: fd.get('ramo') })
-    navigate(NEXT)
-  }
+  const q = useQualificacao()
 
   return (
     <DesktopStage designW={DESIGN_W} designH={DESIGN_H}>
@@ -90,12 +137,12 @@ function Desktop() {
         Para identificarmos o modelo de empresa ideal e evitar riscos fiscais, precisamos entender um pouco sobre o formato do seu negócio.
       </SectionSub>
 
-      <form onSubmit={onSubmit}>
+      <form onSubmit={q.submit}>
         <p className="abs" style={{ left: 169, top: 713, color: 'var(--gray)', fontWeight: 600, fontSize: 20, letterSpacing: '-0.6px', whiteSpace: 'nowrap' }}>
           1. Qual é a estimativa de faturamento bruto do seu negócio?
         </p>
         {FATURAMENTO.map((o, i) => (
-          <Opt key={o.value} squareTop={760 + i * 35} labelTop={758 + i * 35} checked={faturamento === o.value} onSelect={() => setFaturamento(o.value)}>
+          <Opt key={o.value} squareTop={760 + i * 35} labelTop={758 + i * 35} checked={q.faturamento === o.value} onSelect={() => q.setFaturamento(o.value)}>
             {o.label}
           </Opt>
         ))}
@@ -104,7 +151,7 @@ function Desktop() {
           2. Quantos funcionários você precisará contratar inicialmente?
         </p>
         {FUNCIONARIOS.map((o, i) => (
-          <Opt key={o.value} squareTop={900 + i * 35} labelTop={898 + i * 35} checked={funcionarios === o.value} onSelect={() => setFuncionarios(o.value)}>
+          <Opt key={o.value} squareTop={900 + i * 35} labelTop={898 + i * 35} checked={q.funcionarios === o.value} onSelect={() => q.setFuncionarios(o.value)}>
             {o.label}
           </Opt>
         ))}
@@ -112,14 +159,22 @@ function Desktop() {
         <p className="abs" style={{ left: 169, top: 999, color: 'var(--gray)', fontWeight: 600, fontSize: 20, letterSpacing: '-0.6px', whiteSpace: 'nowrap' }}>
           3. Qual é o ramo de atividade ou profissão da sua empresa?
         </p>
-        <input
-          id="ramo"
-          name="ramo"
-          defaultValue={data.ramo}
-          placeholder="Campo de busca com auto-complete"
-          className="abs field-input"
-          style={{ left: 169, top: 1046, width: 568, height: 75, border: `1px solid ${FIELD_BORDER}`, borderRadius: 10, padding: '0 24px', fontSize: 20, color: 'var(--navy)', background: 'var(--white)' }}
-        />
+        <div className="abs" style={{ left: 169, top: 1046, width: 700 }}>
+          <FlowAutocomplete
+            id="ramo"
+            placeholder="Digite a atividade ou o código CNAE"
+            hint="Busque pela base CNAE — digite ao menos 3 caracteres e escolha na lista."
+            value={q.ramo}
+            onChange={q.onType}
+            onSelect={q.onPick}
+            search={searchCnae}
+            itemLabel={cnaeLabel}
+          />
+        </div>
+
+        <div className="abs" style={{ left: 169, top: 1180, width: 900 }}>
+          <FlowError>{q.erro}</FlowError>
+        </div>
 
         <a className="abs box-btn box-btn--outline" href={BACK} style={{ left: 496, top: 1216, width: 137, height: 49, background: 'var(--white)', border: '1px solid var(--teal)', borderRadius: 5, color: 'var(--gray)', fontWeight: 600, fontSize: 20, letterSpacing: '-0.6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           Voltar
@@ -133,29 +188,28 @@ function Desktop() {
 }
 
 function Mobile() {
-  const { data, patch } = useFunnel()
-  const onSubmit = (e) => {
-    e.preventDefault()
-    const fd = new FormData(e.currentTarget)
-    patch({ faturamento: fd.get('faturamento'), funcionarios: fd.get('funcionarios'), ramo: fd.get('ramo') })
-    navigate(NEXT)
-  }
+  const q = useQualificacao()
   return (
     <MobileShell back={BACK} align="left">
       <MTitle>Qual é o perfil da sua futura empresa?</MTitle>
       <MDivider />
       <MHeading>Dados da Empresa e Atividade</MHeading>
       <MSub>Para identificarmos o modelo de empresa ideal e evitar riscos fiscais, precisamos entender um pouco sobre o formato do seu negócio.</MSub>
-      <MForm onSubmit={onSubmit}>
-        <MField id="faturamento" label="Estimativa de faturamento bruto" as="select" defaultValue={data.faturamento || ''}>
-          <option value="" disabled>Selecione…</option>
-          {FATURAMENTO.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-        </MField>
-        <MField id="funcionarios" label="Nº de funcionários" as="select" defaultValue={data.funcionarios || ''}>
-          <option value="" disabled>Selecione…</option>
-          {FUNCIONARIOS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-        </MField>
-        <MField id="ramo" label="Ramo de atividade ou profissão" placeholder="Ex.: Comércio de roupas" defaultValue={data.ramo} />
+      <MForm onSubmit={q.submit}>
+        <MRadio legend="1. Qual é a estimativa de faturamento bruto do seu negócio?" options={FATURAMENTO} value={q.faturamento} onChange={q.setFaturamento} />
+        <MRadio legend="2. Quantos funcionários você precisará contratar inicialmente?" options={FUNCIONARIOS} value={q.funcionarios} onChange={q.setFuncionarios} />
+        <MAutocomplete
+          id="ramo"
+          label="3. Qual é o ramo de atividade ou profissão da sua empresa?"
+          placeholder="Digite a atividade ou o código CNAE"
+          hint="Busque pela base CNAE — digite ao menos 3 caracteres e escolha na lista."
+          error={q.erro}
+          value={q.ramo}
+          onChange={q.onType}
+          onSelect={q.onPick}
+          search={searchCnae}
+          itemLabel={cnaeLabel}
+        />
         <MPrimaryButton step="2/4">Avançar</MPrimaryButton>
       </MForm>
       <MAssistantBar />

@@ -18,6 +18,19 @@ export {
   PrimaryButton,
   AssistantBar,
   FIELD_BORDER,
+  FormColumn,
+  FlowRow,
+  FlowSection,
+  FlowNote,
+  FlowError,
+  FlowField,
+  FlowRadio,
+  FlowAutocomplete,
+  FlowActions,
+  FlowSteps,
+  Modal,
+  ModalCta,
+  ModalLink,
 } from './ui.desktop.jsx'
 
 // Primitivas móveis (coluna única)
@@ -31,4 +44,9 @@ export {
   MForm,
   MPrimaryButton,
   MAssistantBar,
+  MSection,
+  MRadio,
+  MAutocomplete,
+  MCard,
+  MSteps,
 } from './ui.mobile.jsx'

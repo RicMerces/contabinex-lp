@@ -810,3 +810,92 @@
   .m-drag-hint__dot { animation: none; }
   .m-menu, .m-burger span, .m-btn, .m-cta-row { transition: none; }
 }
+
+/* ---- Preço do plano (mobile) ---- */
+.m-plan__price {
+  padding: 18px 22px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.m-plan__price span {
+  color: var(--gray);
+  font-weight: 500;
+  font-size: 12px;
+}
+.m-plan__price p {
+  color: var(--gray);
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.2;
+}
+.m-plan__price strong {
+  color: var(--teal-strong);
+  font-weight: 700;
+  font-size: 30px;
+  letter-spacing: -0.5px;
+}
+
+/* ---- Seção Blog (mobile) ---- */
+.m-artigo {
+  box-sizing: border-box;
+  width: 78vw;
+  max-width: 330px;
+  align-self: stretch;
+  background: var(--white);
+  border: 2px solid var(--teal);
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.m-artigo__img {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+.m-artigo__tag {
+  align-self: flex-start;
+  background: var(--teal);
+  color: var(--white);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: -0.2px;
+  padding: 5px 10px;
+  border-radius: 999px;
+}
+.m-artigo h3 {
+  color: var(--navy);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.3;
+  letter-spacing: -0.3px;
+}
+.m-artigo p {
+  color: var(--gray);
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.m-artigo__more {
+  margin-top: auto;
+  color: var(--teal);
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: underline;
+}
+.m-blog__actions {
+  display: flex;
+  justify-content: center;
+  padding: 22px 22px 0;
+}
+.m-blog__actions .m-btn {
+  width: auto;
+  padding: 14px 26px;
+  font-size: 15px;
+}

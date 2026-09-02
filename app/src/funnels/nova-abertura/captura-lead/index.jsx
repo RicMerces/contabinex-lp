@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   DesktopStage,
   Responsive,
@@ -12,6 +13,7 @@ import {
   Field,
   PrimaryButton,
   AssistantBar,
+  FlowError,
   MobileShell,
   MTitle,
   MDivider,
@@ -22,20 +24,25 @@ import {
   MPrimaryButton,
   MAssistantBar,
 } from '../../../core/index.js'
+import { maskCelular, isValidEmail } from '../../../utils/br.js'
 
 // Tela 02 — Captura de Lead (etapa 1/4). Primeira captura de lead do app.
-// Layout compartilhado entre os funis; muda apenas o título (variant).
+// Layout compartilhado; muda o título, o destino e o plano já escolhido
+// (quando o usuário selecionou um plano direto na landing, ele pula a
+// qualificação e o alerta correspondente — ver fluxo.md).
 // Frame do Figma: 1920 x 1700.
 const DESIGN_W = 1920
 const DESIGN_H = 1700
 
 const VARIANTS = {
-  // Funil A — Nova Abertura
+  // Funil A — Nova Abertura (passa pela qualificação e pelo enquadramento)
   'novo-cnpj': { top: 'Vamos começar a', bottom: 'planejar o seu novo CNPJ', next: '#/abrir-empresa/qualificacao' },
-  // Funil B — Troca de Contador (entrada alternativa)
+  // Funil A — plano escolhido direto na landing (sem passar pelos alertas)
+  simples: { top: 'Vamos começar a', bottom: 'planejar o seu Simples Nacional', next: '#/abrir-empresa/dados-empresa', plano: 'simples' },
+  // Classes Profissionais entra direto pela landing e tem 3 etapas (ver fluxo.md)
+  classes: { top: 'Vamos começar a', bottom: 'planejar a sua Classe Profissional', next: '#/abrir-empresa/dados-classes', plano: 'classes', step: '1/3' },
+  // Funil B — Troca de Contador (Tela 02-B)
   contador: { top: 'Vamos iniciar a', bottom: 'sua troca de contador', next: '#/trocar-contador/validacao' },
-  // Funil C — Triagem (entender o negócio)
-  empresa: { top: 'Vamos começar a', bottom: 'entender o seu negócio', next: '#/descobrir-plano/diagnostico' },
 }
 
 const FIELDS = [
@@ -47,17 +54,28 @@ const FIELDS = [
 function useLeadForm(variant) {
   const v = VARIANTS[variant] || VARIANTS['novo-cnpj']
   const { data, patch } = useFunnel()
+  const [nome, setNome] = useState(data.nome || '')
+  const [email, setEmail] = useState(data.email || '')
+  const [celular, setCelular] = useState(data.celular || '')
+  const [erro, setErro] = useState('')
+
   const onSubmit = (e) => {
     e.preventDefault()
-    const fd = new FormData(e.currentTarget)
-    patch({ nome: fd.get('nome'), email: fd.get('email'), celular: fd.get('celular') })
+    if (!nome.trim()) return setErro('Informe o seu nome completo.')
+    if (!isValidEmail(email)) return setErro('Informe um e-mail válido.')
+    if (celular.replace(/\D/g, '').length < 10) return setErro('Informe um celular válido com DDD.')
+    setErro('')
+    patch({ nome, email, celular, ...(v.plano ? { planoSugerido: v.plano, origemPlano: 'landing' } : null) })
     navigate(v.next)
   }
-  return { v, data, onSubmit }
+
+  const values = { nome, email, celular }
+  const setters = { nome: setNome, email: setEmail, celular: (x) => setCelular(maskCelular(x)) }
+  return { v, values, setters, erro, onSubmit }
 }
 
 function Desktop({ variant }) {
-  const { v, data, onSubmit } = useLeadForm(variant)
+  const { v, values, setters, erro, onSubmit } = useLeadForm(variant)
   return (
     <DesktopStage designW={DESIGN_W} designH={DESIGN_H}>
       <Logo />
@@ -73,9 +91,12 @@ function Desktop({ variant }) {
 
       <form onSubmit={onSubmit}>
         {FIELDS.map((f) => (
-          <Field key={f.id} {...f} defaultValue={data[f.id]} />
+          <Field key={f.id} {...f} value={values[f.id]} onChange={(e) => setters[f.id](e.target.value)} />
         ))}
-        <PrimaryButton step="1/4" />
+        <div className="abs" style={{ left: 165, top: 1125, width: 807 }}>
+          <FlowError>{erro}</FlowError>
+        </div>
+        <PrimaryButton step={v.step || '1/4'} />
       </form>
 
       <AssistantBar />
@@ -84,7 +105,7 @@ function Desktop({ variant }) {
 }
 
 function Mobile({ variant }) {
-  const { v, data, onSubmit } = useLeadForm(variant)
+  const { v, values, setters, erro, onSubmit } = useLeadForm(variant)
   return (
     <MobileShell back="#/" align="left">
       <MTitle>{`${v.top} ${v.bottom}`}</MTitle>
@@ -93,9 +114,10 @@ function Mobile({ variant }) {
       <MSub>Preencha os dados abaixo para iniciar sua jornada digital.</MSub>
       <MForm onSubmit={onSubmit}>
         {FIELDS.map((f) => (
-          <MField key={f.id} id={f.id} label={f.label} type={f.type} placeholder={f.placeholder} autoComplete={f.autoComplete} defaultValue={data[f.id]} />
+          <MField key={f.id} id={f.id} label={f.label} type={f.type} placeholder={f.placeholder} autoComplete={f.autoComplete} value={values[f.id]} onChange={(e) => setters[f.id](e.target.value)} />
         ))}
-        <MPrimaryButton step="1/4">Avançar</MPrimaryButton>
+        {erro && <span className="wz-error">{erro}</span>}
+        <MPrimaryButton step={v.step || '1/4'}>Avançar</MPrimaryButton>
       </MForm>
       <MAssistantBar />
     </MobileShell>

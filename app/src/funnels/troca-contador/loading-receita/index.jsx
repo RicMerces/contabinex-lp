@@ -1,7 +1,9 @@
 import { useEffect } from 'react'
+import { consultarCnpj } from '../../../services/receita.js'
 import {
   DesktopStage,
   Responsive,
+  useFunnel,
   navigate,
   Logo,
   Watermark,
@@ -11,19 +13,31 @@ import {
   MTitle,
 } from '../../../core/index.js'
 
-// Tela 08 — Loading Receita Federal. Estado de espera enquanto consulta a RF.
-// Auto-avança para a confirmação da troca após ~2.5s. Frame do Figma: 1920 x ~1420.
+// Tela 08 — Loading Receita Federal. Consulta o CNPJ + CPF do sócio e injeta
+// os dados cadastrais no estado do funil (data injection). Sucesso → Tela 07/1;
+// CNPJ não encontrado, CPF divergente ou falha na consulta → Tela 08/E.
+// Frame do Figma: 1920 x ~1420.
 const DESIGN_W = 1920
 const DESIGN_H = 1420
 const NEXT = '#/trocar-contador/confirmar-troca'
+const ERRO = '#/trocar-contador/erro-cnpj'
 const CENTER = DESIGN_W / 2
 
 const SPINNER_CSS = `@keyframes tc-spin { to { transform: rotate(360deg) } }`
 
-function useAutoAdvance() {
+/** Dispara a consulta à Receita Federal e roteia conforme o resultado. */
+function useConsulta() {
+  const { data, patch } = useFunnel()
   useEffect(() => {
-    const t = setTimeout(() => navigate(NEXT), 2500)
-    return () => clearTimeout(t)
+    let ativo = true
+    consultarCnpj(data.cnpj, data.cpfSocio).then((res) => {
+      if (!ativo) return
+      if (!res.ok) return navigate(ERRO)
+      patch({ empresa: res.empresa })
+      navigate(NEXT)
+    })
+    return () => { ativo = false }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 }
 
@@ -43,7 +57,7 @@ function Spinner({ size = 64, thickness = 6 }) {
 }
 
 function Desktop() {
-  useAutoAdvance()
+  useConsulta()
   return (
     <DesktopStage designW={DESIGN_W} designH={DESIGN_H}>
       <style>{SPINNER_CSS}</style>
@@ -87,7 +101,7 @@ function Desktop() {
 }
 
 function Mobile() {
-  useAutoAdvance()
+  useConsulta()
   return (
     <MobileShell back={null} align="center">
       <style>{SPINNER_CSS}</style>

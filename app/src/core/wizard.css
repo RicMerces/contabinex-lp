@@ -240,3 +240,176 @@
   .wz-field input,
   .wz-field select { transition: none; }
 }
+
+/* ---- Ajuda e erro em campos ---- */
+.wz-hint {
+  color: var(--gray);
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 1.35;
+}
+.wz-error {
+  color: #c0392b;
+  font-weight: 600;
+  font-size: 13px;
+}
+.wz-field--error input,
+.wz-field--error select,
+.wz-field--error textarea {
+  border-color: #c0392b;
+}
+
+/* ---- Seção do formulário ---- */
+.wz-section {
+  width: 100%;
+  max-width: 520px;
+  margin: 30px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+.wz-section h2 {
+  color: var(--navy);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.5px;
+}
+.wz-section > p {
+  color: var(--gray);
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+/* ---- Opções exclusivas ---- */
+.wz-radio {
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+.wz-radio legend {
+  color: var(--gray);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.3px;
+  margin-bottom: 8px;
+}
+.wz-radio label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 54px;
+  padding: 10px 16px;
+  border: 1px solid #868686;
+  border-radius: 12px;
+  color: var(--gray);
+  font-size: 15px;
+  line-height: 1.35;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.wz-radio label.is-on {
+  border-color: var(--teal);
+  background: var(--teal-light);
+  color: var(--navy);
+  font-weight: 600;
+}
+.wz-radio input {
+  accent-color: var(--teal);
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+}
+
+/* ---- Auto-complete ---- */
+.wz-ac {
+  position: relative;
+}
+.wz-ac__list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  margin-top: 4px;
+  list-style: none;
+  background: var(--white);
+  border: 1px solid #868686;
+  border-radius: 12px;
+  max-height: 260px;
+  overflow-y: auto;
+  box-shadow: 0 12px 28px rgba(51, 55, 111, 0.18);
+}
+.wz-ac__list li {
+  padding: 14px 16px;
+  font-size: 15px;
+  color: var(--navy);
+  border-bottom: 1px solid var(--teal-light);
+  cursor: pointer;
+}
+.wz-ac__list li:last-child {
+  border-bottom: none;
+}
+
+/* ---- Cartões ---- */
+.wz-card {
+  width: 100%;
+  max-width: 520px;
+  margin: 16px auto 0;
+  border-radius: 14px;
+  padding: 16px 18px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.wz-card--light {
+  background: var(--teal-light);
+}
+.wz-card--outline {
+  background: var(--white);
+  border: 1px solid #868686;
+}
+.wz-card h3 {
+  color: var(--navy);
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* ---- Lista numerada de próximos passos ---- */
+.wz-steps {
+  width: 100%;
+  max-width: 520px;
+  margin: 18px auto 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: left;
+}
+.wz-steps li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.wz-steps span {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--teal);
+  color: var(--white);
+  font-weight: 700;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.wz-steps p {
+  color: var(--gray);
+  font-size: 15px;
+  line-height: 1.45;
+}

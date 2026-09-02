@@ -1,19 +1,20 @@
 /* ============================================================
    CONTABINEX — Landing Page
-   Design tokens extraídos do Figma (frame 1920 x 5455)
+   Design tokens extraídos do Figma (frame 1920 x 6147)
    ============================================================ */
 :root {
   /* Cores */
   --navy: #33376f;        /* Azul institucional principal */
   --teal: #62abb2;        /* Verde-água / destaque */
   --teal-light: #dce8ea;  /* Verde-água claro (cards / botões) */
+  --teal-strong: #00afa5; /* Verde dos valores dos planos */
   --gray: #606062;        /* Texto secundário */
   --bg-gray: #f4f4f4;     /* Faixas de fundo */
   --white: #ffffff;
 
   /* Dimensões do design original (Figma) */
   --design-w: 1920;
-  --design-h: 5455;
+  --design-h: 6147;
 }
 
 * {
@@ -44,7 +45,7 @@ body {
 .stage {
   position: relative;
   width: 1920px;
-  height: 5455px;
+  height: 6147px;
   transform-origin: top left;
   background: var(--white);
 }

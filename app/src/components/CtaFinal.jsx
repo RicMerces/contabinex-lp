@@ -6,7 +6,7 @@ export default function CtaFinal() {
   return (
     <>
       {/* Marca d'água CX */}
-      <Reveal className="abs" delay={0} style={{ left: 998, top: 3871, width: 812, height: 439, opacity: 0.16, overflow: 'hidden', pointerEvents: 'none' }}>
+      <Reveal className="abs" delay={0} style={{ left: 998, top: 4493, width: 812, height: 439, opacity: 0.16, overflow: 'hidden', pointerEvents: 'none' }}>
         <img src={watermarkCx} alt="" style={{ width: '100%', height: '100%' }} />
       </Reveal>
 
@@ -15,13 +15,13 @@ export default function CtaFinal() {
         className="abs"
         variant="fromRight"
         delay={140}
-        style={{ left: 1231, top: 3741, width: 656, height: 730, '--anim-dur': 'var(--anim-dur-slide)', '--anim-slide': '160px' }}
+        style={{ left: 1231, top: 4363, width: 656, height: 730, '--anim-dur': 'var(--anim-dur-slide)', '--anim-slide': '160px' }}
       >
         <img src={atendente} alt="Atendente CONTABINEX" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       </Reveal>
 
       {/* Âncora estável (sem transform do Reveal — evita scroll bugado na nav) */}
-      <div id="sec-contato" className="abs" aria-hidden="true" style={{ left: 0, top: 3860, width: 1, height: 1 }} />
+      <div id="sec-contato" className="abs" aria-hidden="true" style={{ left: 0, top: 4482, width: 1, height: 1 }} />
       {/* Chamada */}
       <Reveal
         as="h2"
@@ -29,7 +29,7 @@ export default function CtaFinal() {
         delay={0}
         style={{
           left: 155,
-          top: 3937,
+          top: 4559,
           color: 'var(--white)',
           fontWeight: 700,
           fontSize: 48,
@@ -41,7 +41,7 @@ export default function CtaFinal() {
       </Reveal>
 
       {/* Botão */}
-      <Reveal className="abs" delay={240} style={{ left: 756, top: 4284, width: 408, height: 85 }}>
+      <Reveal className="abs" delay={240} style={{ left: 756, top: 4906, width: 408, height: 85 }}>
         <a
           className="box-cta box-cta--light"
           href="#"
